@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="assets/project-flow.svg" alt="Smart Resource Allocation Platform animated flow" width="100%" />
-</p>
 
 # Smart Resource Allocation & Volunteer Coordination Platform
 

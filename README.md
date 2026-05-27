@@ -15,7 +15,7 @@
 
 This platform turns scattered community information into action. It accepts reports from mobile apps, online forms, NGO files, and scanned paper surveys, then cleans the data, detects urgency, recommends volunteer-task matches, allocates resources, and updates live dashboards.
 
-| Focus | Outcome |
+| Focus | Outcome  |
 | --- | --- |
 | Community data | One place for forms, field reports, CSV uploads, and OCR surveys |
 | AI intelligence | Classifies needs, scores priority, predicts shortages, and finds risk zones |

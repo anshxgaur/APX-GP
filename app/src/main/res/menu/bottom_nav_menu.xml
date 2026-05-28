@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboardFragment"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/nav_dashboard" />
+
+    <item
+        android:id="@+id/taskListFragment"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/nav_tasks" />
+
+    <item
+        android:id="@+id/surveyFragment"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="@string/nav_survey" />
+
+    <item
+        android:id="@+id/notificationFragment"
+        android:icon="@android:drawable/ic_popup_reminder"
+        android:title="@string/nav_notifications" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="@string/nav_profile" />
+
+</menu>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary palette -->
+    <color name="primary">#FF2D6A4F</color>
+    <color name="primary_dark">#FF1B4332</color>
+    <color name="primary_light">#FF40916C</color>
+    <color name="accent">#FF52B788</color>
+    <color name="accent_light">#FF95D5B2</color>
+
+    <!-- Background & Surface -->
+    <color name="background">#FFF0F4F8</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="card_background">#FFFFFFFF</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FF1A1A2E</color>
+    <color name="text_secondary">#FF6C757D</color>
+    <color name="text_hint">#FFADB5BD</color>
+    <color name="text_on_primary">#FFFFFFFF</color>
+
+    <!-- Urgency colors -->
+    <color name="urgency_critical">#FFD62828</color>
+    <color name="urgency_high">#FFF77F00</color>
+    <color name="urgency_moderate">#FFFCBF49</color>
+    <color name="urgency_low">#FF52B788</color>
+    <color name="urgency_minimal">#FFADB5BD</color>
+
+    <!-- Status colors -->
+    <color name="status_pending">#FFFCBF49</color>
+    <color name="status_reviewed">#FF52B788</color>
+    <color name="status_actioned">#FF2D6A4F</color>
+    <color name="status_open">#FF52B788</color>
+    <color name="status_ongoing">#FFF77F00</color>
+    <color name="status_completed">#FF2D6A4F</color>
+    <color name="status_cancelled">#FFD62828</color>
+
+    <!-- Notification highlight -->
+    <color name="notification_unread">#FFF0FFF4</color>
+    <color name="notification_read">#FFFFFFFF</color>
+
+    <!-- Misc -->
+    <color name="divider">#FFE9ECEF</color>
+    <color name="error">#FFD62828</color>
+    <color name="ripple">#1A2D6A4F</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Chip colors -->
+    <color name="chip_background">#FFE8F5E9</color>
+    <color name="chip_text">#FF2D6A4F</color>
+    <color name="chip_selected_background">#FF2D6A4F</color>
+    <color name="chip_selected_text">#FFFFFFFF</color>
+
+    <!-- StatusBar -->
+    <color name="status_bar">#FF1B4332</color>
+</resources>

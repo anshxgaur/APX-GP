@@ -1,0 +1,8 @@
+# Supabase Configuration
+# Get these from your Supabase project dashboard: https://app.supabase.com
+SUPABASE_URL=https://qynywejgiplbzcoiycym.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5bnl3ZWpnaXBsYnpjb2l5Y3ltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5NDgyNDAsImV4cCI6MjA5NTUyNDI0MH0.lMb5Q1PxV4_w4YHTUjXAJj3SR8v4yZz_OddST8X8sdA
+
+# Google Maps API Key
+# Get from: https://console.cloud.google.com/apis/credentials
+MAPS_API_KEY=your-maps-api-key-here

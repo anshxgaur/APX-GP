@@ -1,290 +1,471 @@
+![](Bottom_up.svg)
 
-# Smart Resource Allocation & Volunteer Coordination Platform
+<div align="center">
 
-> AI-powered platform that collects community needs, detects urgent cases, matches volunteers, allocates resources, and gives NGOs a live decision dashboard.
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge\&logo=fastapi\&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=for-the-badge\&logo=flutter\&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge\&logo=postgresql\&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge\&logo=opencv\&logoColor=white)
+![PaddleOCR](https://img.shields.io/badge/PaddleOCR-FF6B35?style=for-the-badge)
+![Scikit Learn](https://img.shields.io/badge/ScikitLearn-F7931E?style=for-the-badge\&logo=scikitlearn\&logoColor=white)
+![Power BI](https://img.shields.io/badge/Analytics-PowerBI-F2C811?style=for-the-badge\&logo=powerbi\&logoColor=black)
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Frontend-Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Flutter" />
-  <img src="https://img.shields.io/badge/Backend-Spring_Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
-  <img src="https://img.shields.io/badge/Auth-Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
-  <img src="https://img.shields.io/badge/Cloud-Google_Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Google Cloud" />
-  <img src="https://img.shields.io/badge/AI-Vertex_AI-8E24AA?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Vertex AI" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=650&size=40&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1100&lines=Transforming+NGO+Operations+Through+AI;Data+Engineering+and+Intelligent+Decision+Making" alt="Typing SVG">
 </p>
 
-## Project Snapshot
+</div>
 
-This platform turns scattered community information into action. It accepts reports from mobile apps, online forms, NGO files, and scanned paper surveys, then cleans the data, detects urgency, recommends volunteer-task matches, allocates resources, and updates live dashboards.
+---
 
-| Focus | Outcome  |
-| --- | --- |
-| Community data | One place for forms, field reports, CSV uploads, and OCR surveys |
-| AI intelligence | Classifies needs, scores priority, predicts shortages, and finds risk zones |
-| Volunteer coordination | Matches tasks using skill, availability, distance, urgency, and workload |
-| Resource operations | Tracks inventory, deliveries, shortages, and emergency response |
-| NGO visibility | Heatmaps, live status, emergency reports, and stakeholder summaries |
+# 📌 Problem Statement
 
-## Architecture
+Thousands of NGOs across India still rely on:
+
+* Paper-based surveys
+* Manual data entry
+* Spreadsheet management
+* Delayed decision making
+* Inefficient volunteer allocation
+
+This results in:
+
+❌ Lost data
+
+❌ Delayed interventions
+
+❌ Resource wastage
+
+❌ Poor visibility into community needs
+
+❌ Difficulty identifying high-priority beneficiaries
+
+---
+
+# 💡 Solution
+
+SevaAI is an AI-powered Social Impact Intelligence Platform that digitizes survey data, analyzes community needs, predicts risks, and intelligently assigns volunteers to maximize social impact.
+
+Instead of merely storing survey information, SevaAI converts raw field data into actionable intelligence.
+
+---
+
+# 🚀 Key Features
+
+## 📄 Intelligent Survey Digitization
+
+* Paper Survey Scanning
+* Mobile Camera Capture
+* OCR Extraction
+* AI-Based Data Cleaning
+* Structured Data Generation
+
+---
+
+## 🤖 AI Data Structuring Engine
+
+Converts unstructured survey responses into machine-readable records.
+
+Example:
+
+Input:
+
+Child has not attended school for four months because father migrated.
+
+Output:
+
+```json
+{
+  "school_dropout": true,
+  "duration": "4 months",
+  "reason": "migration"
+}
+```
+
+---
+
+## 🏥 Community Risk Detection
+
+Automatically identifies:
+
+* School Dropout Risk
+* Healthcare Risk
+* Malnutrition Risk
+* Employment Risk
+* Disability Support Needs
+
+---
+
+## 🎯 Priority Prediction Engine
+
+Ranks beneficiaries based on urgency.
+
+Priority Levels:
+
+* Critical
+* High
+* Medium
+* Low
+
+---
+
+## 👥 Volunteer Recommendation System
+
+Matches volunteers using:
+
+* Skills
+* Experience
+* Availability
+* Language
+* Distance
+* Historical Performance
+
+Output:
+
+```text
+Volunteer A : 94%
+Volunteer B : 82%
+Volunteer C : 71%
+```
+
+---
+
+## 📊 Impact Analytics Dashboard
+
+Provides:
+
+* Survey Insights
+* Community Statistics
+* Volunteer Performance
+* Intervention Outcomes
+* Risk Heatmaps
+
+---
+
+## 🗺️ GIS Risk Mapping
+
+Visualizes vulnerable communities geographically.
+
+* High Risk Areas
+* Medium Risk Areas
+* Low Risk Areas
+
+---
+
+## 🧠 AI Survey Summarization
+
+Converts hundreds of survey records into concise reports.
+
+Example:
+
+```text
+32 children are currently out of school.
+
+14 families require urgent medical support.
+
+8 villages show high malnutrition indicators.
+```
+
+---
+
+## 🏘️ Community Digital Twin
+
+Creates a digital representation of communities.
+
+Predicts:
+
+* Future Risks
+* Volunteer Demand
+* Healthcare Requirements
+* Educational Challenges
+
+---
+
+# 🏗️ System Architecture
 
 ```mermaid
 flowchart TD
-    A["Client Layer"]
-    B["Data Collection Layer"]
-    C["API and Backend Services"]
-    D["Cloud Storage Layer"]
-    E["ETL Processing Layer"]
-    F["AI ML Engine"]
-    G["Resource Allocation Engine"]
-    H["Notification System"]
-    I["Analytics Dashboard"]
 
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    F --> G
-    G --> H
-    H --> I
+A[Survey Collection] --> B[OCR Processing]
 
-    classDef client fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:2px;
-    classDef data fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:2px;
-    classDef backend fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:2px;
-    classDef cloud fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:2px;
-    classDef ai fill:#FCE4EC,stroke:#D81B60,color:#880E4F,stroke-width:2px;
-    classDef ops fill:#E0F7FA,stroke:#00ACC1,color:#006064,stroke-width:2px;
-    classDef notify fill:#FFFDE7,stroke:#FDD835,color:#5D4037,stroke-width:2px;
-    classDef analytics fill:#ECEFF1,stroke:#546E7A,color:#263238,stroke-width:2px;
+B --> C[AI Data Structuring]
 
-    class A client;
-    class B,E data;
-    class C backend;
-    class D cloud;
-    class F ai;
-    class G ops;
-    class H notify;
-    class I analytics;
+C --> D[Data Warehouse]
+
+D --> E[Risk Detection Engine]
+
+D --> F[Priority Prediction Engine]
+
+D --> G[Volunteer Recommendation Engine]
+
+E --> H[Admin Dashboard]
+
+F --> H
+
+G --> H
+
+H --> I[Volunteer Assignment]
+
+I --> J[Volunteer Mobile App]
+
+J --> K[Impact Tracking]
+
+K --> L[Community Digital Twin]
 ```
 
-## Layer Responsibilities
+---
 
-| Layer | Includes |
-| --- | --- |
-| Client Layer | Web portal, Flutter mobile app, NGO dashboard, volunteer app |
-| Data Collection | Online forms, field reports, CSV/Excel uploads, OCR scans, mobile inputs |
-| Backend Services | Spring Boot APIs, authentication, uploads, validation |
-| Cloud Storage | Firestore, Google Cloud Storage, PostgreSQL/MySQL, BigQuery |
-| ETL Processing | Cleaning, normalization, duplicate removal, transformation |
-| AI ML Engine | Priority detection, need classification, risk analysis, prediction |
-| Allocation Engine | Task assignment, volunteer allocation, resource distribution, geo optimization |
-| Notifications | SMS alerts, push notifications, emails, emergency broadcasts |
-| Analytics | Heatmaps, volunteer status, resource tracking, emergency reports |
+# 📱 Platform Components
 
-## Roadmap
+## Admin Portal
+
+Features:
+
+* Dashboard
+* Survey Analytics
+* Volunteer Management
+* Risk Monitoring
+* Intervention Tracking
+* AI Copilot
+
+---
+
+## Volunteer Application
+
+Features:
+
+* Volunteer Registration
+* Profile Management
+* Task Assignment
+* Task Completion
+* Survey Submission
+* Notifications
+
+---
+
+# 🧩 Technology Stack
+
+| Layer            | Technology             |
+| ---------------- | ---------------------- |
+| Frontend Web     | React.js               |
+| Mobile App       | Flutter                |
+| Backend API      | FastAPI                |
+| OCR Engine       | PaddleOCR              |
+| Image Processing | OpenCV                 |
+| AI Models        | Scikit-Learn           |
+| LLM Layer        | Gemini / Llama         |
+| Database         | PostgreSQL             |
+| Data Warehouse   | PostgreSQL Star Schema |
+| Analytics        | Power BI               |
+| Maps             | Leaflet.js             |
+| Containerization | Docker                 |
+| Version Control  | Git & GitHub           |
+
+---
+
+# 🗄️ Data Warehouse Design
+
+## Star Schema
 
 ```mermaid
-flowchart LR
-    P1["Phase 1: Plan"]
-    P2["Phase 2: Collect"]
-    P3["Phase 3: Clean"]
-    P4["Phase 4: Analyze"]
-    P5["Phase 5: Coordinate"]
-    P6["Phase 6: Notify"]
-    P7["Phase 7: Deploy"]
+erDiagram
 
-    P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P7
+FACT_SURVEY {
+int survey_id
+int beneficiary_id
+int volunteer_id
+int date_id
+int task_id
+}
 
-    P1a["Requirements, architecture, cloud setup"] --> P1
-    P2a["Forms, file upload, OCR input"] --> P2
-    P3a["ETL, normalization, deduplication"] --> P3
-    P4a["Classification, priority score, risk prediction"] --> P4
-    P5a["Volunteer profile, matching, task assignment"] --> P5
-    P6a["Push, SMS, email"] --> P6
-    P7a["Testing, CI CD, pilot rollout"] --> P7
+DIM_BENEFICIARY {
+int beneficiary_id
+string name
+string village
+int age
+string gender
+}
 
-    classDef phase fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:2px;
-    classDef detail fill:#F8FAFC,stroke:#94A3B8,color:#334155,stroke-width:1px;
-    class P1,P2,P3,P4,P5,P6,P7 phase;
-    class P1a,P2a,P3a,P4a,P5a,P6a,P7a detail;
+DIM_VOLUNTEER {
+int volunteer_id
+string skills
+string location
+}
+
+DIM_TASK {
+int task_id
+string task_type
+string priority
+}
+
+DIM_DATE {
+int date_id
+date survey_date
+}
 ```
 
-## Data Flow
+---
+
+# 🤖 AI Modules
+
+## Module 1
+
+OCR + Data Extraction
+
+Tools:
+
+* PaddleOCR
+* OpenCV
+
+---
+
+## Module 2
+
+Data Structuring Engine
+
+Tasks:
+
+* Entity Extraction
+* Data Validation
+* Duplicate Detection
+
+---
+
+## Module 3
+
+Volunteer Recommendation System
+
+Models:
+
+* Random Forest
+* XGBoost
+* Cosine Similarity Matching
+
+---
+
+## Module 4
+
+Priority Prediction Engine
+
+Predicts:
+
+* Urgency
+* Resource Allocation Needs
+
+---
+
+## Module 5
+
+Community Risk Detection
+
+Detects:
+
+* Dropout Risk
+* Malnutrition Risk
+* Healthcare Vulnerability
+
+---
+
+## Module 6
+
+AI Copilot
+
+Natural Language Queries:
+
+Examples:
+
+```text
+Which village needs immediate attention?
+
+Show dropout trends.
+
+Which volunteer performed best this month?
+```
+
+---
+
+# 🔄 End-to-End Workflow
 
 ```mermaid
-flowchart TD
-    U["Community or NGO"]
-    IN["Submit report or file"]
-    API["Validate and store"]
-    ETL["Clean and normalize"]
-    AI["Classify and prioritize"]
-    MATCH["Match volunteers and resources"]
-    ALERT["Send alerts"]
-    DASH["Update dashboard"]
+sequenceDiagram
 
-    U --> IN --> API --> ETL --> AI --> MATCH --> ALERT --> DASH
+Volunteer->>Mobile App: Capture Survey
 
-    classDef input fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:2px;
-    classDef process fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:2px;
-    classDef smart fill:#FCE4EC,stroke:#D81B60,color:#880E4F,stroke-width:2px;
-    classDef output fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:2px;
-    class U,IN input;
-    class API,ETL process;
-    class AI,MATCH smart;
-    class ALERT,DASH output;
+Mobile App->>OCR Engine: Upload Image
+
+OCR Engine->>AI Engine: Extract Text
+
+AI Engine->>Database: Store Structured Data
+
+Database->>Risk Engine: Analyze Community
+
+Risk Engine->>Dashboard: Display Risks
+
+Dashboard->>Admin: Suggested Actions
+
+Admin->>Volunteer: Assign Task
+
+Volunteer->>Community: Perform Intervention
+
+Community->>Dashboard: Impact Recorded
 ```
 
-## MVP Scope
+---
 
-- Role-based authentication for admin, NGO, coordinator, and volunteer users.
-- Need report submission through form, mobile input, CSV/Excel upload, and scanned survey.
-- Basic data validation, ETL cleaning, duplicate detection, and priority scoring.
-- Volunteer profile with skills, availability, GPS location, and task status.
-- AI-assisted task matching with coordinator approval.
-- Push notification, SMS alert, and email notification support.
-- NGO/admin dashboard with heatmap, volunteer status, resource tracking, and reports.
+# 🎯 Expected Impact
 
-## Tech Stack
+### NGOs
 
-| Area | Recommended Stack |
-| --- | --- |
-| Frontend | Flutter, Flutter Web |
-| Backend | Spring Boot REST APIs, Google Cloud Functions or Cloud Run |
-| Auth | Firebase Auth, Spring Security, JWT |
-| Database | Firestore, PostgreSQL/MySQL, BigQuery |
-| Storage | Google Cloud Storage |
-| AI ML | Vertex AI, TensorFlow, Google Cloud AI APIs |
-| Notifications | Firebase Cloud Messaging, SMS Gateway, Email Service |
-| DevOps | GitHub Actions, Docker, Google Cloud Platform |
+* Faster decision making
+* Better volunteer utilization
+* Reduced manual effort
 
-<details>
-<summary><strong>Open Full Documentation</strong></summary>
+### Communities
 
-## Problem
+* Faster intervention
+* Better support targeting
+* Improved service delivery
 
-NGOs and community teams often receive information from disconnected sources such as paper surveys, field reports, calls, spreadsheets, and mobile messages. This causes duplicate reports, slow prioritization, poor resource visibility, and delayed volunteer assignment.
+### Government & Organizations
 
-## Goal
+* Data-driven planning
+* Community intelligence
+* Predictive social welfare analytics
 
-Build one platform that collects community needs, cleans and organizes the data, uses AI to find urgency, assigns volunteers and resources, sends alerts, and gives NGOs a live operational dashboard.
+---
 
-## User Roles
+# 📈 Future Roadmap
 
-| Role | Responsibility |
-| --- | --- |
-| Community Member | Submits needs and requests |
-| Volunteer | Accepts tasks, reaches locations, submits completion feedback |
-| Coordinator | Uploads reports, validates data, approves task matches |
-| NGO Admin | Tracks needs, volunteers, resources, and impact reports |
-| System Admin | Manages roles, security, configuration, and audits |
+## Phase 1
 
-## Detailed Modules
+* OCR Pipeline
+* Admin Dashboard
+* Volunteer App
 
-### Client Applications
+## Phase 2
 
-The web portal, Flutter mobile app, NGO dashboard, and volunteer app provide role-specific access. Volunteers can manage skills and tasks, coordinators can upload reports and approve matches, and NGOs can monitor operations through dashboards.
+* Recommendation Engine
+* Risk Detection
+* Priority Prediction
 
-### Data Collection
+## Phase 3
 
-The platform collects online form submissions, field reports, NGO spreadsheets, scanned paper surveys, and mobile inputs. OCR converts paper survey images into digital text before validation.
+* AI Copilot
+* GIS Mapping
+* Community Digital Twin
 
-### Backend Services
+## Phase 4
 
-Spring Boot REST APIs handle users, reports, files, tasks, resources, dashboards, and notifications. Authentication can be managed through Firebase Auth with Spring Security/JWT for API protection.
+* State-Level Deployment
+* Government Integration
+* Multi-NGO Collaboration Network
 
-### Storage
+---
 
-Firestore stores real-time app data, Google Cloud Storage stores uploaded files, PostgreSQL/MySQL stores relational records, and BigQuery supports analytics and historical reporting.
+# 🌟 Vision
 
-### ETL Pipeline
+SevaAI aims to become the operating system for social impact organizations, enabling NGOs, governments, and community workers to make faster, smarter, and more impactful decisions through Artificial Intelligence.
 
-The ETL layer cleans invalid values, normalizes categories and locations, removes duplicates, transforms raw reports into structured records, and prepares analytics-ready data.
-
-### AI ML Engine
-
-AI models classify needs, detect priority, analyze area risk, predict shortages, and recommend volunteer-task matches using skill, distance, availability, urgency, workload, and safety constraints.
-
-### Resource Allocation
-
-The allocation engine creates tasks, assigns volunteers, links required resources, tracks delivery status, and uses location data to reduce response time.
-
-### Notification System
-
-Firebase Cloud Messaging, SMS, and email are used for task alerts, reminders, emergency broadcasts, status updates, and stakeholder summaries.
-
-### Analytics Dashboard
-
-Dashboards show live heatmaps, need categories, volunteer availability, resource inventory, delivery progress, emergency reports, and trend summaries.
-
-## Core Data Entities
-
-| Entity | Key Fields |
-| --- | --- |
-| User | userId, name, phone, email, role, organizationId, status |
-| Volunteer | volunteerId, skills, availability, location, workload, completedTasks |
-| Need Report | reportId, sourceType, category, description, location, severity, priorityScore |
-| Task | taskId, needReportId, assignedVolunteerId, status, deadline, feedback |
-| Resource | resourceId, name, category, availableQuantity, allocatedQuantity, location |
-| Notification | notificationId, recipientId, channel, message, status, sentAt |
-
-## API Modules
-
-| Module | Example APIs |
-| --- | --- |
-| Authentication | register, login, refresh token, get profile, update role |
-| Need Reports | create report, upload attachment, validate, update priority |
-| Volunteers | create profile, update skills, update availability, get assigned tasks |
-| Tasks | create task, assign task, update status, upload completion proof |
-| Resources | add inventory, allocate resource, track delivery, mark shortage |
-| Dashboard | heatmap data, volunteer summary, resource summary, emergency reports |
-
-## Matching Score
-
-```text
-matchingScore =
-  skillMatchScore * 0.35 +
-  distanceScore * 0.25 +
-  availabilityScore * 0.20 +
-  urgencyScore * 0.10 +
-  workloadBalanceScore * 0.10
-```
-
-## Suggested Repository Structure
-
-```text
-smart-resource-allocation-platform/
-|-- backend/
-|-- mobile_app/
-|-- web_dashboard/
-|-- ml_engine/
-|-- cloud_functions/
-|-- docs/
-|-- diagrams/
-|-- .github/workflows/
-`-- README.md
-```
-
-## Testing And Deployment
-
-- Unit and integration tests for backend services.
-- Mobile and web UI testing for key user flows.
-- Security testing for authentication, file uploads, and role permissions.
-- CI/CD with GitHub Actions.
-- Pilot rollout with selected NGOs, then regional and larger deployment.
-
-## Future Extensions
-
-- Multi-language support.
-- Government open-data integration.
-- Chatbot assistant for volunteers and coordinators.
-- Predictive analytics for resource shortages.
-- Transparent public reporting for non-sensitive aggregated data.
-- Blockchain-based audit trail for resource distribution.
-
-## Success Metrics
-
-- Faster identification of urgent needs.
-- Higher successful volunteer-task match rate.
-- Reduced duplicate reports.
-- Faster resource delivery.
-- Better NGO visibility into volunteers, inventory, and emergencies.
-
-</details>
+> From Paper Surveys to Predictive Social Intelligence.

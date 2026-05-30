@@ -1,4 +1,3 @@
-# 🌍 SevaAI - AI Powered Social Impact Intelligence Platform
 ![](Bottom_up.svg)
 
 <div align="center">

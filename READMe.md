@@ -14,7 +14,7 @@
 
 ### Transforming NGO Operations Through AI, Data Engineering and Intelligent Decision Making
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=650&size=40&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=750&lines=Transforming+NGO+Operations+Through+AI;Data+Engineering+and+Intelligent+Decision+Making" alt="Typing SVG">
+  <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=650&size=40&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1100&lines=Transforming+NGO+Operations+Through+AI;Data+Engineering+and+Intelligent+Decision+Making" alt="Typing SVG">
 </p>
 
 </div>

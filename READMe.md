@@ -12,7 +12,6 @@
 ![Scikit Learn](https://img.shields.io/badge/ScikitLearn-F7931E?style=for-the-badge\&logo=scikitlearn\&logoColor=white)
 ![Power BI](https://img.shields.io/badge/Analytics-PowerBI-F2C811?style=for-the-badge\&logo=powerbi\&logoColor=black)
 
-### Transforming NGO Operations Through AI, Data Engineering and Intelligent Decision Making
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=650&size=40&duration=3000&pause=1000&color=00BFFF&center=true&vCenter=true&width=1100&lines=Transforming+NGO+Operations+Through+AI;Data+Engineering+and+Intelligent+Decision+Making" alt="Typing SVG">
 </p>

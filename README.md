@@ -439,8 +439,6 @@ Community->>Dashboard: Impact Recorded
 # 📈 Future Roadmap
 
 ## Phase 1
-
-* OCR Pipeline
 * Admin Dashboard
 * Volunteer App
 
@@ -449,6 +447,7 @@ Community->>Dashboard: Impact Recorded
 * Recommendation Engine
 * Risk Detection
 * Priority Prediction
+* OCR Pipeline
 
 ## Phase 3
 

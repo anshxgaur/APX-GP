@@ -1,5 +1,4 @@
 ![](Bottom_up.svg)
-
 <p align="center">
   <img src="banner.png" alt="SevaAI Banner" width="100%">
 </p>

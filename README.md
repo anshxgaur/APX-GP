@@ -1,5 +1,9 @@
 ![](Bottom_up.svg)
 
+<p align="center">
+  <img src="assets/banner.png" alt="SevaAI Banner" width="100%">
+</p>
+
 <div align="center">
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge\&logo=python\&logoColor=white)

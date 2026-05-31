@@ -1,7 +1,7 @@
 ![](Bottom_up.svg)
 
 <p align="center">
-  <img src="assets/banner.png" alt="SevaAI Banner" width="100%">
+  <img src="banner.png" alt="SevaAI Banner" width="100%">
 </p>
 
 <div align="center">

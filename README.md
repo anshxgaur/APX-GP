@@ -449,13 +449,12 @@ Community->>Dashboard: Impact Recorded
 ## Phase 2
 
 * Recommendation Engine
-* Risk Detection
 * Priority Prediction
 * OCR Pipeline
 * database
 
 ## Phase 3
-
+* Risk Detection
 * AI Copilot
 * GIS Mapping
 * Community Digital Twin

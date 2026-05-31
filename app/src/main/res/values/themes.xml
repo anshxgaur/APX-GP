@@ -87,32 +87,35 @@
         <item name="checkedIconEnabled">true</item>
     </style>
 
+    <!-- Base text appearance -->
+    <style name="TextAppearance.SRA" parent="TextAppearance.Material3.BodyMedium" />
+
     <!-- Heading styles -->
-    <style name="TextAppearance.SRA.Headline">
+    <style name="TextAppearance.SRA.Headline" parent="TextAppearance.SRA">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.SRA.Title">
+    <style name="TextAppearance.SRA.Title" parent="TextAppearance.SRA">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.SRA.Subtitle">
+    <style name="TextAppearance.SRA.Subtitle" parent="TextAppearance.SRA">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="TextAppearance.SRA.Body">
+    <style name="TextAppearance.SRA.Body" parent="TextAppearance.SRA">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/text_primary</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
-    <style name="TextAppearance.SRA.Caption">
+    <style name="TextAppearance.SRA.Caption" parent="TextAppearance.SRA">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/text_secondary</item>
         <item name="android:fontFamily">sans-serif</item>

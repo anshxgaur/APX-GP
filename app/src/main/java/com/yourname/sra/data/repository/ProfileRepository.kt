@@ -13,7 +13,25 @@ class ProfileRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) {
 
+    private val isMockMode = com.yourname.sra.BuildConfig.SUPABASE_URL.contains("placeholder")
+
     suspend fun getProfile(userId: String): Result<Volunteer> {
+        if (isMockMode) {
+            return Result.success(
+                Volunteer(
+                    id = "mock-volunteer-id",
+                    fullName = "John Doe",
+                    email = "arhaan@example.com",
+                    phone = "+91 98765 43210",
+                    area = "Delhi NGO Zone",
+                    skills = listOf("First Aid", "Logistics", "Rescue Operations"),
+                    availability = "flexible",
+                    totalTasksCompleted = 12,
+                    totalHours = 45,
+                    profilePhotoUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb"
+                )
+            )
+        }
         return try {
             val volunteer = supabaseClient.postgrest.from("volunteers")
                 .select {
@@ -30,6 +48,7 @@ class ProfileRepository @Inject constructor(
     }
 
     suspend fun updateProfile(volunteer: Volunteer): Result<Unit> {
+        if (isMockMode) return Result.success(Unit)
         return try {
             supabaseClient.postgrest.from("volunteers").update(
                 {
@@ -53,6 +72,7 @@ class ProfileRepository @Inject constructor(
     }
 
     suspend fun incrementTasksCompleted(userId: String): Result<Unit> {
+        if (isMockMode) return Result.success(Unit)
         return try {
             val volunteer = getProfile(userId).getOrThrow()
             supabaseClient.postgrest.from("volunteers").update(
@@ -72,6 +92,7 @@ class ProfileRepository @Inject constructor(
     }
 
     suspend fun uploadProfilePhoto(imageBytes: ByteArray, fileName: String): Result<String> {
+        if (isMockMode) return Result.success("https://images.unsplash.com/photo-1534528741775-53994a69daeb")
         return try {
             val bucket = supabaseClient.storage.from("profile-photos")
             bucket.upload(fileName, imageBytes, upsert = true)

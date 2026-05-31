@@ -226,9 +226,6 @@ class TaskDetailFragment : Fragment() {
     }
 
     private fun showCompletionDialog(taskId: String) {
-        val dialogView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.fragment_task_detail, null) // We'll use a simple dialog instead
-
         val textInputLayout = TextInputLayout(requireContext()).apply {
             hint = getString(R.string.task_detail_complete_dialog_hint)
             setPadding(48, 16, 48, 0)

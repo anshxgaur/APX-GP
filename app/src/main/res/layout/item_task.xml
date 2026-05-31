@@ -97,13 +97,16 @@
             android:layout_marginTop="8dp"
             app:singleLine="true" />
 
-        <!-- Action Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAction"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:textSize="13sp"
+            android:textSize="14sp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             app:cornerRadius="10dp" />
 
     </LinearLayout>

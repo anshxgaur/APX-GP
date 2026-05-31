@@ -1,8 +1,8 @@
 package com.yourname.sra.data.repository
 
 import io.github.jan.supabase.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -11,6 +11,8 @@ import javax.inject.Singleton
 class AuthRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) {
+
+    private val isMockMode = com.yourname.sra.BuildConfig.SUPABASE_URL.contains("placeholder")
 
     suspend fun signUp(
         email: String,
@@ -21,6 +23,7 @@ class AuthRepository @Inject constructor(
         skills: List<String>,
         availability: String
     ): Result<Unit> {
+        if (isMockMode) return Result.success(Unit)
         return try {
             // 1. Create auth user
             supabaseClient.auth.signUpWith(Email) {
@@ -52,6 +55,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun login(email: String, password: String): Result<Unit> {
+        if (isMockMode) return Result.success(Unit)
         return try {
             supabaseClient.auth.signInWith(Email) {
                 this.email = email
@@ -64,6 +68,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout(): Result<Unit> {
+        if (isMockMode) return Result.success(Unit)
         return try {
             supabaseClient.auth.signOut()
             Result.success(Unit)
@@ -73,10 +78,14 @@ class AuthRepository @Inject constructor(
     }
 
     fun isLoggedIn(): Boolean {
+        if (isMockMode) return true
         return supabaseClient.auth.currentSessionOrNull() != null
     }
 
     fun getCurrentUserId(): String? {
+        if (isMockMode) return "mock-volunteer-id"
         return supabaseClient.auth.currentUserOrNull()?.id
     }
 }
+
+

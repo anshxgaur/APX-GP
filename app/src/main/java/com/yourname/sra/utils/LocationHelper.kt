@@ -1,6 +1,7 @@
 package com.yourname.sra.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -30,6 +31,7 @@ class LocationHelper(private val context: Context) {
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @SuppressLint("MissingPermission")
     fun getCurrentLocation(
         onSuccess: (latitude: Double, longitude: Double) -> Unit,
         onFailure: (String) -> Unit

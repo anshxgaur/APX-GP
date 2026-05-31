@@ -19,7 +19,64 @@ class TaskRepository @Inject constructor(
     private val taskDao: TaskDao
 ) {
 
+    private val isMockMode = com.yourname.sra.BuildConfig.SUPABASE_URL.contains("placeholder")
+
+    private val mockTasksList = java.util.concurrent.CopyOnWriteArrayList<Task>().apply {
+        add(
+            Task(
+                id = "mock-task-1",
+                title = "Deliver Emergency Medical Supplies",
+                description = "Urgent delivery of first-aid kits and insulin to the Community Center clinic.",
+                category = "Medical",
+                urgency = 3,
+                locationName = "Downtown Community Center",
+                latitude = 37.7749,
+                longitude = -122.4194,
+                requiredSkills = listOf("First Aid", "Driving"),
+                estimatedHours = 2,
+                status = "ongoing",
+                assignedVolunteer = "mock-volunteer-id",
+                createdAt = "2026-05-30T10:00:00Z"
+            )
+        )
+        add(
+            Task(
+                id = "mock-task-2",
+                title = "Debris Clearance on Main St",
+                description = "Clear fallen branches and minor debris blocking the north lane of Main St.",
+                category = "Infrastructure",
+                urgency = 2,
+                locationName = "120 Main Street",
+                latitude = 37.7849,
+                longitude = -122.4294,
+                requiredSkills = listOf("Physical Labor"),
+                estimatedHours = 3,
+                status = "open",
+                createdAt = "2026-05-30T11:00:00Z"
+            )
+        )
+        add(
+            Task(
+                id = "mock-task-3",
+                title = "Elderly Care Food Delivery",
+                description = "Distribute hot meals to elderly residents at the Silver Care Home.",
+                category = "Food Distribution",
+                urgency = 1,
+                locationName = "Silver Care Home",
+                latitude = 37.7649,
+                longitude = -122.4094,
+                requiredSkills = listOf("Empathy", "Driving"),
+                estimatedHours = 1,
+                status = "open",
+                createdAt = "2026-05-30T12:00:00Z"
+            )
+        )
+    }
+
     suspend fun getOpenTasks(): Result<List<Task>> {
+        if (isMockMode) {
+            return Result.success(mockTasksList.filter { it.status == "open" })
+        }
         return try {
             val tasks = supabaseClient.postgrest.from("tasks")
                 .select {
@@ -47,6 +104,9 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun getMyTasks(volunteerId: String, status: String): Result<List<Task>> {
+        if (isMockMode) {
+            return Result.success(mockTasksList.filter { it.status == status && it.assignedVolunteer == volunteerId })
+        }
         return try {
             val tasks = supabaseClient.postgrest.from("tasks")
                 .select {
@@ -74,6 +134,10 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun getTaskById(taskId: String): Result<Task> {
+        if (isMockMode) {
+            val task = mockTasksList.find { it.id == taskId }
+            return if (task != null) Result.success(task) else Result.failure(Exception("Task not found"))
+        }
         return try {
             val task = supabaseClient.postgrest.from("tasks")
                 .select {
@@ -99,6 +163,18 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun acceptTask(taskId: String, volunteerId: String): Result<Unit> {
+        if (isMockMode) {
+            val index = mockTasksList.indexOfFirst { it.id == taskId }
+            if (index != -1) {
+                val task = mockTasksList[index]
+                mockTasksList[index] = task.copy(
+                    status = "ongoing",
+                    assignedVolunteer = volunteerId,
+                    startedAt = Instant.now().toString()
+                )
+            }
+            return Result.success(Unit)
+        }
         return try {
             val now = Instant.now().toString()
             supabaseClient.postgrest.from("tasks").update(
@@ -120,8 +196,20 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun completeTask(taskId: String, note: String): Result<Unit> {
+        if (isMockMode) {
+            val index = mockTasksList.indexOfFirst { it.id == taskId }
+            if (index != -1) {
+                val task = mockTasksList[index]
+                mockTasksList[index] = task.copy(
+                    status = "completed",
+                    completedAt = Instant.now().toString(),
+                    completionNote = note
+                )
+            }
+            return Result.success(Unit)
+        }
         return try {
-            val now = Clock.System.now().toString()
+            val now = Instant.now().toString()
             supabaseClient.postgrest.from("tasks").update(
                 {
                     set("status", "completed")
@@ -141,6 +229,14 @@ class TaskRepository @Inject constructor(
     }
 
     suspend fun updateFieldNotes(taskId: String, notes: String): Result<Unit> {
+        if (isMockMode) {
+            val index = mockTasksList.indexOfFirst { it.id == taskId }
+            if (index != -1) {
+                val task = mockTasksList[index]
+                mockTasksList[index] = task.copy(fieldNotes = notes)
+            }
+            return Result.success(Unit)
+        }
         return try {
             supabaseClient.postgrest.from("tasks").update(
                 {

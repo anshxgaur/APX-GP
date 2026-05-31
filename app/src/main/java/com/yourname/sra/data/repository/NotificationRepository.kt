@@ -12,7 +12,38 @@ class NotificationRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) {
 
+    private val isMockMode = com.yourname.sra.BuildConfig.SUPABASE_URL.contains("placeholder")
+
+    private val mockNotificationsList = java.util.concurrent.CopyOnWriteArrayList<AppNotification>().apply {
+        add(
+            AppNotification(
+                id = "mock-notif-1",
+                volunteerId = "mock-volunteer-id",
+                title = "New Task Assigned",
+                message = "You have been assigned to: Deliver Emergency Medical Supplies.",
+                type = "task_assigned",
+                isRead = false,
+                taskId = "mock-task-1",
+                createdAt = "2026-05-30T10:05:00Z"
+            )
+        )
+        add(
+            AppNotification(
+                id = "mock-notif-2",
+                volunteerId = "mock-volunteer-id",
+                title = "Welcome Volunteer!",
+                message = "Thank you for registering with the Smart Resource Allocation system.",
+                type = "general",
+                isRead = true,
+                createdAt = "2026-05-30T09:00:00Z"
+            )
+        )
+    }
+
     suspend fun getNotifications(volunteerId: String): Result<List<AppNotification>> {
+        if (isMockMode) {
+            return Result.success(mockNotificationsList)
+        }
         return try {
             val notifications = supabaseClient.postgrest.from("notifications")
                 .select {
@@ -29,6 +60,14 @@ class NotificationRepository @Inject constructor(
     }
 
     suspend fun markAsRead(notificationId: String): Result<Unit> {
+        if (isMockMode) {
+            val index = mockNotificationsList.indexOfFirst { it.id == notificationId }
+            if (index != -1) {
+                val notif = mockNotificationsList[index]
+                mockNotificationsList[index] = notif.copy(isRead = true)
+            }
+            return Result.success(Unit)
+        }
         return try {
             supabaseClient.postgrest.from("notifications").update(
                 {
@@ -46,6 +85,9 @@ class NotificationRepository @Inject constructor(
     }
 
     suspend fun getUnreadCount(volunteerId: String): Result<Int> {
+        if (isMockMode) {
+            return Result.success(mockNotificationsList.count { !it.isRead })
+        }
         return try {
             val notifications = supabaseClient.postgrest.from("notifications")
                 .select {

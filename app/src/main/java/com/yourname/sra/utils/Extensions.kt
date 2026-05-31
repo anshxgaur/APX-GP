@@ -1,7 +1,6 @@
 package com.yourname.sra.utils
 
 import android.view.View
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.yourname.sra.R

@@ -197,7 +197,7 @@ flowchart TD
 | --- | --- |
 | Frontend | Flutter, Flutter Web |
 | Backend | Spring Boot REST APIs, Google Cloud Functions or Cloud Run |
-| Auth | Firebase Auth, Spring Security, JWT |
+| Auth | Supabase Auth, Spring Security, JWT |
 | Database | Firestore, PostgreSQL/MySQL, BigQuery |
 | Storage | Google Cloud Storage |
 | AI ML | Vertex AI, TensorFlow, Google Cloud AI APIs |

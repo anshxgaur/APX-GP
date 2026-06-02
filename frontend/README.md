@@ -274,7 +274,7 @@ This is the most important phase. If Supabase and ML heatmap are not complete by
 | June 8 | Save ML output into `area_risk_scores` | Ansh + Aashita | Risk scores stored in Supabase |
 | June 9 | Build heatmap UI | Aashita + Ansh | Map renders risk locations |
 | June 10 | Connect heatmap with ML risk scores | Ankit + Ansh | Heatmap shows calculated area risk |
-| June 11 | Add filters, legends, and popups | Ankit + Arhaan | Heatmap is demo-friendly |
+| June 11 | Add filters, legends, and popups | Ankit + Arhaan + Abhay | Heatmap is demo-friendly |
 | June 12 | Test full Supabase + ML + heatmap flow | Abhay + Arhan | Bugs identified and fixed |
 | June 13 | Phase 2 freeze and internal demo | Everyone | Supabase + ML heatmap completed |
 

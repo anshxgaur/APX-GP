@@ -8,8 +8,10 @@ import com.yourname.sra.data.remote.SupabaseClientProvider
 import com.yourname.sra.data.repository.AuthRepository
 import com.yourname.sra.data.repository.NotificationRepository
 import com.yourname.sra.data.repository.ProfileRepository
+import com.yourname.sra.data.repository.RiskScoreRepository
 import com.yourname.sra.data.repository.SurveyRepository
 import com.yourname.sra.data.repository.TaskRepository
+import com.yourname.sra.data.repository.TaskUpdateRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,5 +79,17 @@ object AppModule {
     @Singleton
     fun provideNotificationRepository(supabaseClient: SupabaseClient): NotificationRepository {
         return NotificationRepository(supabaseClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRiskScoreRepository(supabaseClient: SupabaseClient): RiskScoreRepository {
+        return RiskScoreRepository(supabaseClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskUpdateRepository(supabaseClient: SupabaseClient): TaskUpdateRepository {
+        return TaskUpdateRepository(supabaseClient)
     }
 }

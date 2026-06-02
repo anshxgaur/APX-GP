@@ -9,6 +9,7 @@ data class Volunteer(
     @SerialName("full_name") val fullName: String = "",
     val email: String = "",
     val phone: String = "",
+    val role: String = "volunteer",
     val area: String = "",
     val latitude: Double? = null,
     val longitude: Double? = null,
@@ -17,10 +18,12 @@ data class Volunteer(
     @SerialName("profile_photo_url") val profilePhotoUrl: String? = null,
     @SerialName("total_tasks_completed") val totalTasksCompleted: Int = 0,
     @SerialName("total_hours") val totalHours: Int = 0,
-    @SerialName("is_admin") val isAdmin: Boolean = false,
     @SerialName("created_at") val createdAt: String = "",
     @SerialName("updated_at") val updatedAt: String = ""
-)
+) {
+    val isAdmin: Boolean get() = role == "admin"
+    val isSurveyor: Boolean get() = role == "surveyor"
+}
 
 @Serializable
 data class Survey(
@@ -42,6 +45,7 @@ data class Survey(
 @Serializable
 data class Task(
     val id: String = "",
+    @SerialName("survey_id") val surveyId: String? = null,
     val title: String = "",
     val description: String = "",
     val category: String = "",
@@ -60,6 +64,29 @@ data class Task(
     @SerialName("field_notes") val fieldNotes: String? = null,
     @SerialName("created_at") val createdAt: String = "",
     @SerialName("updated_at") val updatedAt: String = ""
+)
+
+@Serializable
+data class TaskUpdate(
+    val id: String = "",
+    @SerialName("task_id") val taskId: String = "",
+    @SerialName("volunteer_id") val volunteerId: String = "",
+    @SerialName("update_text") val updateText: String = "",
+    val status: String = "ongoing",
+    @SerialName("photo_url") val photoUrl: String? = null,
+    @SerialName("created_at") val createdAt: String = ""
+)
+
+@Serializable
+data class AreaRiskScore(
+    val id: String = "",
+    @SerialName("area_name") val areaName: String = "",
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    @SerialName("risk_score") val riskScore: Float = 0f,
+    @SerialName("risk_level") val riskLevel: String = "low",
+    @SerialName("contributing_factors") val contributingFactors: List<String> = emptyList(),
+    @SerialName("calculated_at") val calculatedAt: String = ""
 )
 
 @Serializable

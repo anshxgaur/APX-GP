@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS volunteers (
     full_name TEXT NOT NULL DEFAULT '',
     email TEXT NOT NULL DEFAULT '',
     phone TEXT DEFAULT '',
+    role TEXT NOT NULL DEFAULT 'volunteer' CHECK (role IN ('admin', 'volunteer', 'surveyor')),
     area TEXT DEFAULT '',
     latitude DOUBLE PRECISION,
     longitude DOUBLE PRECISION,
@@ -22,16 +23,35 @@ CREATE TABLE IF NOT EXISTS volunteers (
     profile_photo_url TEXT,
     total_tasks_completed INTEGER DEFAULT 0,
     total_hours INTEGER DEFAULT 0,
-    is_admin BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT now(),
     updated_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- ═══════════════════════════════════
--- 2. TASKS TABLE
+-- 2. SURVEYS TABLE
+-- ═══════════════════════════════════
+CREATE TABLE IF NOT EXISTS surveys (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    volunteer_id UUID NOT NULL REFERENCES volunteers(id) ON DELETE CASCADE,
+    category TEXT NOT NULL,
+    severity INTEGER NOT NULL DEFAULT 1 CHECK (severity BETWEEN 1 AND 5),
+    people_affected INTEGER DEFAULT 0,
+    description TEXT DEFAULT '',
+    location_name TEXT DEFAULT '',
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+    photo_url TEXT,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'reviewed', 'actioned')),
+    admin_notes TEXT,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- ═══════════════════════════════════
+-- 3. TASKS TABLE
 -- ═══════════════════════════════════
 CREATE TABLE IF NOT EXISTS tasks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    survey_id UUID REFERENCES surveys(id) ON DELETE SET NULL,
     title TEXT NOT NULL,
     description TEXT DEFAULT '',
     category TEXT NOT NULL,
@@ -53,26 +73,20 @@ CREATE TABLE IF NOT EXISTS tasks (
 );
 
 -- ═══════════════════════════════════
--- 3. SURVEYS TABLE
+-- 4. TASK UPDATES TABLE
 -- ═══════════════════════════════════
-CREATE TABLE IF NOT EXISTS surveys (
+CREATE TABLE IF NOT EXISTS task_updates (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
     volunteer_id UUID NOT NULL REFERENCES volunteers(id) ON DELETE CASCADE,
-    category TEXT NOT NULL,
-    severity INTEGER NOT NULL DEFAULT 1 CHECK (severity BETWEEN 1 AND 5),
-    people_affected INTEGER DEFAULT 0,
-    description TEXT DEFAULT '',
-    location_name TEXT DEFAULT '',
-    latitude DOUBLE PRECISION,
-    longitude DOUBLE PRECISION,
+    update_text TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'ongoing' CHECK (status IN ('ongoing', 'completed', 'blocked')),
     photo_url TEXT,
-    status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'reviewed', 'actioned')),
-    admin_notes TEXT,
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
 -- ═══════════════════════════════════
--- 4. NOTIFICATIONS TABLE
+-- 5. NOTIFICATIONS TABLE
 -- ═══════════════════════════════════
 CREATE TABLE IF NOT EXISTS notifications (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -86,18 +100,53 @@ CREATE TABLE IF NOT EXISTS notifications (
 );
 
 -- ═══════════════════════════════════
--- 5. INDEXES
+-- 6. AREA RISK SCORES TABLE (ML Output)
 -- ═══════════════════════════════════
+CREATE TABLE IF NOT EXISTS area_risk_scores (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    area_name TEXT NOT NULL,
+    latitude DOUBLE PRECISION NOT NULL,
+    longitude DOUBLE PRECISION NOT NULL,
+    risk_score REAL NOT NULL DEFAULT 0.0 CHECK (risk_score BETWEEN 0.0 AND 10.0),
+    risk_level TEXT NOT NULL DEFAULT 'low' CHECK (risk_level IN ('low', 'medium', 'high', 'critical')),
+    contributing_factors JSONB DEFAULT '[]'::jsonb,
+    calculated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- ═══════════════════════════════════
+-- 7. INDEXES
+-- ═══════════════════════════════════
+
+-- Tasks
 CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status);
 CREATE INDEX IF NOT EXISTS idx_tasks_assigned ON tasks(assigned_volunteer);
 CREATE INDEX IF NOT EXISTS idx_tasks_urgency ON tasks(urgency DESC);
+CREATE INDEX IF NOT EXISTS idx_tasks_survey ON tasks(survey_id);
+
+-- Surveys
 CREATE INDEX IF NOT EXISTS idx_surveys_volunteer ON surveys(volunteer_id);
 CREATE INDEX IF NOT EXISTS idx_surveys_status ON surveys(status);
+CREATE INDEX IF NOT EXISTS idx_surveys_created_at ON surveys(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_surveys_location ON surveys(location_name);
+
+-- Notifications
 CREATE INDEX IF NOT EXISTS idx_notifications_volunteer ON notifications(volunteer_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_unread ON notifications(volunteer_id, is_read);
 
+-- Task Updates
+CREATE INDEX IF NOT EXISTS idx_task_updates_task ON task_updates(task_id);
+CREATE INDEX IF NOT EXISTS idx_task_updates_volunteer ON task_updates(volunteer_id);
+
+-- Area Risk Scores
+CREATE INDEX IF NOT EXISTS idx_risk_scores_area ON area_risk_scores(area_name);
+CREATE INDEX IF NOT EXISTS idx_risk_scores_score ON area_risk_scores(risk_score DESC);
+CREATE INDEX IF NOT EXISTS idx_risk_scores_level ON area_risk_scores(risk_level);
+
+-- Volunteers
+CREATE INDEX IF NOT EXISTS idx_volunteers_role ON volunteers(role);
+
 -- ═══════════════════════════════════
--- 6. ROW LEVEL SECURITY (RLS)
+-- 8. ROW LEVEL SECURITY (RLS)
 -- ═══════════════════════════════════
 
 -- Enable RLS on all tables
@@ -105,11 +154,21 @@ ALTER TABLE volunteers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
 ALTER TABLE surveys ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE task_updates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE area_risk_scores ENABLE ROW LEVEL SECURITY;
 
--- VOLUNTEERS: Users can read/update their own profile; admins can read all
+-- ─── VOLUNTEERS ───
 CREATE POLICY "Users can view own profile"
     ON volunteers FOR SELECT
     USING (auth.uid() = id);
+
+CREATE POLICY "Admins can view all profiles"
+    ON volunteers FOR SELECT
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
 
 CREATE POLICY "Users can update own profile"
     ON volunteers FOR UPDATE
@@ -119,27 +178,78 @@ CREATE POLICY "Users can insert own profile"
     ON volunteers FOR INSERT
     WITH CHECK (auth.uid() = id);
 
--- TASKS: All authenticated users can read tasks; only assigned volunteer can update
+-- ─── TASKS ───
 CREATE POLICY "Authenticated users can view all tasks"
     ON tasks FOR SELECT
     TO authenticated
     USING (true);
 
-CREATE POLICY "Assigned volunteer can update task"
+CREATE POLICY "Admins can insert tasks"
+    ON tasks FOR INSERT
+    TO authenticated
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
+CREATE POLICY "Assigned volunteer can update own task"
     ON tasks FOR UPDATE
     TO authenticated
-    USING (assigned_volunteer = auth.uid() OR status = 'open');
+    USING (assigned_volunteer = auth.uid());
 
--- SURVEYS: Users can view own surveys; can insert own surveys
+CREATE POLICY "Any authenticated user can accept open task"
+    ON tasks FOR UPDATE
+    TO authenticated
+    USING (status = 'open' AND assigned_volunteer IS NULL);
+
+CREATE POLICY "Admins can update any task"
+    ON tasks FOR UPDATE
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
+-- ─── SURVEYS ───
 CREATE POLICY "Users can view own surveys"
     ON surveys FOR SELECT
     USING (volunteer_id = auth.uid());
+
+CREATE POLICY "Admins can view all surveys"
+    ON surveys FOR SELECT
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
 
 CREATE POLICY "Users can insert own surveys"
     ON surveys FOR INSERT
     WITH CHECK (volunteer_id = auth.uid());
 
--- NOTIFICATIONS: Users can view and update own notifications
+CREATE POLICY "Admins can update any survey"
+    ON surveys FOR UPDATE
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
+-- ─── TASK UPDATES ───
+CREATE POLICY "Task participants can view updates"
+    ON task_updates FOR SELECT
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Volunteers can insert own updates"
+    ON task_updates FOR INSERT
+    TO authenticated
+    WITH CHECK (volunteer_id = auth.uid());
+
+-- ─── NOTIFICATIONS ───
 CREATE POLICY "Users can view own notifications"
     ON notifications FOR SELECT
     USING (volunteer_id = auth.uid());
@@ -148,31 +258,74 @@ CREATE POLICY "Users can update own notifications"
     ON notifications FOR UPDATE
     USING (volunteer_id = auth.uid());
 
+CREATE POLICY "System can insert notifications"
+    ON notifications FOR INSERT
+    TO authenticated
+    WITH CHECK (true);
+
+-- ─── AREA RISK SCORES ───
+CREATE POLICY "Anyone can view risk scores"
+    ON area_risk_scores FOR SELECT
+    TO authenticated
+    USING (true);
+
+CREATE POLICY "Admins can insert risk scores"
+    ON area_risk_scores FOR INSERT
+    TO authenticated
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
+CREATE POLICY "Admins can update risk scores"
+    ON area_risk_scores FOR UPDATE
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
+CREATE POLICY "Admins can delete risk scores"
+    ON area_risk_scores FOR DELETE
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
+        )
+    );
+
 -- ═══════════════════════════════════
--- 7. STORAGE BUCKETS
+-- 9. STORAGE BUCKETS
 -- ═══════════════════════════════════
--- Run these via the Supabase Dashboard > Storage or SQL:
 INSERT INTO storage.buckets (id, name, public) VALUES ('profile-photos', 'profile-photos', true)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO storage.buckets (id, name, public) VALUES ('survey-photos', 'survey-photos', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Storage policies
-CREATE POLICY "Authenticated users can upload profile photos"
+-- Storage policies (path-scoped to user)
+CREATE POLICY "Users can upload own profile photos"
     ON storage.objects FOR INSERT
     TO authenticated
-    WITH CHECK (bucket_id = 'profile-photos');
+    WITH CHECK (
+        bucket_id = 'profile-photos'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
 
 CREATE POLICY "Anyone can view profile photos"
     ON storage.objects FOR SELECT
     TO public
     USING (bucket_id = 'profile-photos');
 
-CREATE POLICY "Authenticated users can upload survey photos"
+CREATE POLICY "Users can upload own survey photos"
     ON storage.objects FOR INSERT
     TO authenticated
-    WITH CHECK (bucket_id = 'survey-photos');
+    WITH CHECK (
+        bucket_id = 'survey-photos'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
 
 CREATE POLICY "Anyone can view survey photos"
     ON storage.objects FOR SELECT
@@ -180,7 +333,61 @@ CREATE POLICY "Anyone can view survey photos"
     USING (bucket_id = 'survey-photos');
 
 -- ═══════════════════════════════════
--- 8. SAMPLE DATA (optional)
+-- 10. HELPER FUNCTIONS (RPC)
+-- ═══════════════════════════════════
+
+-- Atomic increment for tasks completed (avoids race condition)
+CREATE OR REPLACE FUNCTION increment_tasks_completed(user_id UUID)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    UPDATE volunteers
+    SET total_tasks_completed = total_tasks_completed + 1,
+        updated_at = now()
+    WHERE id = user_id;
+END;
+$$;
+
+-- Atomic increment for total hours
+CREATE OR REPLACE FUNCTION increment_total_hours(user_id UUID, hours INTEGER)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    UPDATE volunteers
+    SET total_hours = total_hours + hours,
+        updated_at = now()
+    WHERE id = user_id;
+END;
+$$;
+
+-- Clear old risk scores before recalculation
+CREATE OR REPLACE FUNCTION clear_risk_scores()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    DELETE FROM area_risk_scores;
+END;
+$$;
+
+-- ═══════════════════════════════════
+-- 11. REALTIME SUBSCRIPTIONS
+-- ═══════════════════════════════════
+-- Enable realtime for key tables via Supabase Dashboard > Database > Replication
+-- Or run:
+ALTER PUBLICATION supabase_realtime ADD TABLE surveys;
+ALTER PUBLICATION supabase_realtime ADD TABLE tasks;
+ALTER PUBLICATION supabase_realtime ADD TABLE task_updates;
+ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+ALTER PUBLICATION supabase_realtime ADD TABLE area_risk_scores;
+
+-- ═══════════════════════════════════
+-- 12. SAMPLE DATA (optional)
 -- ═══════════════════════════════════
 
 -- Insert sample tasks (after signing up at least one user)

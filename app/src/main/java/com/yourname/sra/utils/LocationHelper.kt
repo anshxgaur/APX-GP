@@ -75,18 +75,18 @@ class LocationHelper(private val context: Context) {
             try {
                 val geocoder = Geocoder(context, Locale.getDefault())
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    var result = ""
-                    geocoder.getFromLocation(lat, lng, 1) { addresses ->
-                        if (addresses.isNotEmpty()) {
-                            val address = addresses[0]
-                            result = buildString {
-                                address.getAddressLine(0)?.let { append(it) }
+                    kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
+                        geocoder.getFromLocation(lat, lng, 1) { addresses ->
+                            val result = if (addresses.isNotEmpty()) {
+                                addresses[0].getAddressLine(0) ?: "Lat: $lat, Lng: $lng"
+                            } else {
+                                "Lat: $lat, Lng: $lng"
+                            }
+                            if (continuation.isActive) {
+                                continuation.resume(result) {}
                             }
                         }
                     }
-                    // Give geocoder time to callback
-                    kotlinx.coroutines.delay(500)
-                    result.ifEmpty { "Lat: $lat, Lng: $lng" }
                 } else {
                     val addresses = geocoder.getFromLocation(lat, lng, 1)
                     if (!addresses.isNullOrEmpty()) {
@@ -101,3 +101,4 @@ class LocationHelper(private val context: Context) {
         }
     }
 }
+

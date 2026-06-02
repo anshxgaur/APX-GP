@@ -10,6 +10,7 @@ import com.yourname.sra.data.model.Task
 @TypeConverters(StringListConverter::class)
 data class TaskEntity(
     @PrimaryKey val id: String,
+    val surveyId: String? = null,
     val title: String = "",
     val description: String = "",
     val category: String = "",
@@ -31,6 +32,7 @@ data class TaskEntity(
 ) {
     fun toTask(): Task = Task(
         id = id,
+        surveyId = surveyId,
         title = title,
         description = description,
         category = category,
@@ -54,6 +56,7 @@ data class TaskEntity(
     companion object {
         fun fromTask(task: Task): TaskEntity = TaskEntity(
             id = task.id,
+            surveyId = task.surveyId,
             title = task.title,
             description = task.description,
             category = task.category,

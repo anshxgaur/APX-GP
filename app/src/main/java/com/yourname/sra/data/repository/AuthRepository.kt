@@ -12,18 +12,16 @@ class AuthRepository @Inject constructor(
     private val supabaseClient: SupabaseClient
 ) {
 
-    private val isMockMode = com.yourname.sra.BuildConfig.SUPABASE_URL.contains("placeholder")
-
     suspend fun signUp(
         email: String,
         password: String,
         fullName: String,
         phone: String,
+        role: String = "volunteer",
         area: String,
         skills: List<String>,
         availability: String
     ): Result<Unit> {
-        if (isMockMode) return Result.success(Unit)
         return try {
             // 1. Create auth user
             supabaseClient.auth.signUpWith(Email) {
@@ -42,6 +40,7 @@ class AuthRepository @Inject constructor(
                     "full_name" to fullName,
                     "email" to email,
                     "phone" to phone,
+                    "role" to role,
                     "area" to area,
                     "skills" to skills,
                     "availability" to availability
@@ -55,7 +54,6 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun login(email: String, password: String): Result<Unit> {
-        if (isMockMode) return Result.success(Unit)
         return try {
             supabaseClient.auth.signInWith(Email) {
                 this.email = email
@@ -68,7 +66,6 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout(): Result<Unit> {
-        if (isMockMode) return Result.success(Unit)
         return try {
             supabaseClient.auth.signOut()
             Result.success(Unit)
@@ -78,14 +75,10 @@ class AuthRepository @Inject constructor(
     }
 
     fun isLoggedIn(): Boolean {
-        if (isMockMode) return true
         return supabaseClient.auth.currentSessionOrNull() != null
     }
 
     fun getCurrentUserId(): String? {
-        if (isMockMode) return "mock-volunteer-id"
         return supabaseClient.auth.currentUserOrNull()?.id
     }
 }
-
-

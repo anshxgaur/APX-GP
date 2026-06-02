@@ -276,18 +276,6 @@ This is the most important phase. If Supabase and ML heatmap are not complete by
 | Arhan | Integration support | Connect shared Supabase client, fix imports/routes, create reusable risk/priority/status tags, support heatmap integration | Frontend modules connect cleanly |
 | Abhay | QA and documentation | Test survey table, Supabase reads/writes, ML score output, heatmap filters, and risk colors; collect screenshots | Phase 2 bug list and screenshots |
 
-### Phase 2 Team Work
-
-| Member | Responsibility | Detailed Work | Final Output |
-| --- | --- | --- | --- |
-| Aashita | Auth and admin layout | Connect admin login with Supabase Auth, build protected routes, finalize sidebar, topbar, logout, and NGO admin profile | Admin can login and use protected dashboard layout |
-| Ankit | Heatmap UI | Build complete React Leaflet heatmap page, add markers, legends, filters, and map popups | Heatmap UI ready and waiting for ML risk data |
-| Arora | Surveys and volunteers | Connect `survey_reports` and `volunteers` tables to admin website, add search, filters, detail drawer, and status tags | Admin can view survey forms and volunteer records from Supabase |
-| Ansh | ML risk scoring and heatmap intelligence | Fetch survey data from Supabase, calculate risk score, risk level, heatmap color, and recommended priority; save output into `area_risk_scores` | ML/risk model completed and connected to heatmap data |
-| Anirudh | Supabase database lead | Create Supabase project, tables, relationships, primary keys, env setup, and basic policies | Working Supabase backend |
-| Arpit | Data support for ML and Supabase | Insert realistic demo data for cities, areas, problem types, severity, people affected, coordinates, volunteers, and tasks | Strong demo dataset for ML and heatmap |
-| Arhan | Integration support | Connect shared Supabase client, fix imports/routes, create reusable risk/priority/status tags, support heatmap integration | Frontend modules connect cleanly |
-| Abhay | QA and documentation | Test survey table, Supabase reads/writes, ML score output, heatmap filters, and risk colors; collect screenshots | Phase 2 bug list and screenshots |
 
 ### Phase 2 Must-Have Deliverables
 

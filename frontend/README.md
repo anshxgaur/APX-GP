@@ -276,22 +276,18 @@ This is the most important phase. If Supabase and ML heatmap are not complete by
 | Arhan | Integration support | Connect shared Supabase client, fix imports/routes, create reusable risk/priority/status tags, support heatmap integration | Frontend modules connect cleanly |
 | Abhay | QA and documentation | Test survey table, Supabase reads/writes, ML score output, heatmap filters, and risk colors; collect screenshots | Phase 2 bug list and screenshots |
 
-### Phase 2 Day-Wise Plan
+### Phase 2 Team Work
 
-| Date | Focus | Owners | Output |
+| Member | Responsibility | Detailed Work | Final Output |
 | --- | --- | --- | --- |
-| June 2 | Finalize Supabase schema and project setup | Anirudh + Arpit | Supabase project and table plan ready |
-| June 3 | Create tables and relationships | Anirudh + Arpit | Database tables ready |
-| June 4 | Insert demo survey, volunteer, task, and area data | Arpit + Anirudh | Supabase has test data |
-| June 5 | Connect admin website to Supabase | Anirudh + Arpit | Supabase client working in frontend |
-| June 6 | Display survey enquiries from Supabase | Arora + Aashita | Admin can view survey forms |
-| June 7 | Build first ML risk scoring function | Ansh + Arhaan | Risk score generated from survey data |
-| June 8 | Save ML output into `area_risk_scores` | Ansh + Aashita | Risk scores stored in Supabase |
-| June 9 | Build heatmap UI | Ashita + Ansh | Map renders risk locations |
-| June 10 | Connect heatmap with ML risk scores | Ankit + Ansh | Heatmap shows calculated area risk |
-| June 11 | Add filters, legends, and popups | Ankit | Heatmap is demo-friendly |
-| June 12 | Test full Supabase + ML + heatmap flow | Abhay + Arhan | Bugs identified and fixed |
-| June 13 | Phase 2 freeze and internal demo | Everyone | Supabase + ML heatmap completed |
+| Aashita | Auth and admin layout | Connect admin login with Supabase Auth, build protected routes, finalize sidebar, topbar, logout, and NGO admin profile | Admin can login and use protected dashboard layout |
+| Ankit | Heatmap UI | Build complete React Leaflet heatmap page, add markers, legends, filters, and map popups | Heatmap UI ready and waiting for ML risk data |
+| Arora | Surveys and volunteers | Connect `survey_reports` and `volunteers` tables to admin website, add search, filters, detail drawer, and status tags | Admin can view survey forms and volunteer records from Supabase |
+| Ansh | ML risk scoring and heatmap intelligence | Fetch survey data from Supabase, calculate risk score, risk level, heatmap color, and recommended priority; save output into `area_risk_scores` | ML/risk model completed and connected to heatmap data |
+| Anirudh | Supabase database lead | Create Supabase project, tables, relationships, primary keys, env setup, and basic policies | Working Supabase backend |
+| Arpit | Data support for ML and Supabase | Insert realistic demo data for cities, areas, problem types, severity, people affected, coordinates, volunteers, and tasks | Strong demo dataset for ML and heatmap |
+| Arhan | Integration support | Connect shared Supabase client, fix imports/routes, create reusable risk/priority/status tags, support heatmap integration | Frontend modules connect cleanly |
+| Abhay | QA and documentation | Test survey table, Supabase reads/writes, ML score output, heatmap filters, and risk colors; collect screenshots | Phase 2 bug list and screenshots |
 
 ### Phase 2 Must-Have Deliverables
 

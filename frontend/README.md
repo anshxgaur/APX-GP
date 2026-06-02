@@ -281,13 +281,13 @@ This is the most important phase. If Supabase and ML heatmap are not complete by
 | Date | Focus | Owners | Output |
 | --- | --- | --- | --- |
 | June 2 | Finalize Supabase schema and project setup | Anirudh + Arpit | Supabase project and table plan ready |
-| June 3 | Create tables and relationships | Anirudh | Database tables ready |
+| June 3 | Create tables and relationships | Anirudh + Arpit | Database tables ready |
 | June 4 | Insert demo survey, volunteer, task, and area data | Arpit + Anirudh | Supabase has test data |
 | June 5 | Connect admin website to Supabase | Anirudh + Arpit | Supabase client working in frontend |
-| June 6 | Display survey enquiries from Supabase | Arora + aashita | Admin can view survey forms |
-| June 7 | Build first ML risk scoring function | Ansh + arhaan | Risk score generated from survey data |
-| June 8 | Save ML output into `area_risk_scores` | Ansh + aashita | Risk scores stored in Supabase |
-| June 9 | Build heatmap UI | aashita + ansh | Map renders risk locations |
+| June 6 | Display survey enquiries from Supabase | Arora + Aashita | Admin can view survey forms |
+| June 7 | Build first ML risk scoring function | Ansh + Arhaan | Risk score generated from survey data |
+| June 8 | Save ML output into `area_risk_scores` | Ansh + Aashita | Risk scores stored in Supabase |
+| June 9 | Build heatmap UI | Ashita + Ansh | Map renders risk locations |
 | June 10 | Connect heatmap with ML risk scores | Ankit + Ansh | Heatmap shows calculated area risk |
 | June 11 | Add filters, legends, and popups | Ankit | Heatmap is demo-friendly |
 | June 12 | Test full Supabase + ML + heatmap flow | Abhay + Arhan | Bugs identified and fixed |

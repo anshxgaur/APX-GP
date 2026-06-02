@@ -219,6 +219,7 @@ The remaining project is divided into 3 execution phases:
 
 | Phase | Dates | Main Goal |
 | --- | --- | --- |
+| Phase 1 | May 25  - June 1 |website for admin , application for the volunteer |
 | Phase 2 | June 2 - June 13 | Complete Supabase, survey data flow, ML risk scoring, and heatmap |
 | Phase 3 | June 14 - June 25 | Complete task assignment, volunteer app flow, and admin operations |
 | Phase 4 | June 25 - July 5 | Complete reports, analytics, polish, testing, deployment, and demo |

@@ -163,7 +163,7 @@ flowchart TD
 
 We are not building an expensive ML pipeline.
 
-For this 1-month project, we will use a lightweight risk scoring model.
+For this project timeline, we will use a lightweight risk scoring model.
 
 ```text
 riskScore =
@@ -211,82 +211,195 @@ This makes the project realistic, low-cost, and easy to complete within the dead
 
 ---
 
-## 1-Month Roadmap
+## Project Timeline
+
+Phase 1 is already considered the UI-building phase where the team creates the basic admin website and volunteer app screens.
+
+The remaining project is divided into 3 execution phases:
+
+| Phase | Dates | Main Goal |
+| --- | --- | --- |
+| Phase 2 | June 2 - June 13 | Complete Supabase, survey data flow, ML risk scoring, and heatmap |
+| Phase 3 | June 14 - June 25 | Complete task assignment, volunteer app flow, and admin operations |
+| Phase 4 | June 25 - July 5 | Complete reports, analytics, polish, testing, deployment, and demo |
 
 ```mermaid
 flowchart LR
-    W1["Week 1: Setup and UI skeleton"]
-    W2["Week 2: Supabase and core data"]
-    W3["Week 3: Heatmap and task flow"]
-    W4["Week 4: Reports, testing and demo"]
+    P1["Phase 1: Basic app and website UI"]
+    P2["Phase 2: Supabase + ML Heatmap"]
+    P3["Phase 3: Task + Volunteer Flow"]
+    P4["Phase 4: Reports + Final Demo"]
 
-    W1 --> W2 --> W3 --> W4
+    P1 --> P2 --> P3 --> P4
 
-    classDef week fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:2px;
-    class W1,W2,W3,W4 week;
+    classDef phase fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:2px;
+    class P1,P2,P3,P4 phase;
 ```
 
 ---
 
-## Week 1 Random Work Assignment
+## Phase 1 Work Summary
 
-In Week 1, everyone works on setup, research, UI skeletons, and small independent modules. This helps the team move fast without waiting for backend completion.
+In Phase 1, the team only builds the basic app and website screens with dummy/mock data. This phase is for creating the visual foundation before Supabase and ML are connected.
 
-| Member | Week 1 Random Task | Output |
+| Member | Phase 1 Work | Output |
 | --- | --- | --- |
 | Aashita | Login page and NGO admin profile UI | Login screen, profile screen |
 | Ankit | Heatmap UI research and map page skeleton | Basic map page with dummy points |
 | Arora | Survey page UI and volunteer page UI | Survey table, volunteer table |
 | Ansh | Task allocation and analytics UI skeleton | Task table, analytics cards |
-| Member 5 | Supabase project setup and database planning | Supabase project, table plan |
-| Member 6 | Form enquiry design and dummy survey data | Sample survey form and mock data |
-| Member 7 | Volunteer app screen design | Mobile task list and task details UI |
-| Member 8 | README, presentation flow, testing checklist | Documentation and demo plan |
-
-> Replace Member 5, Member 6, Member 7, and Member 8 with the actual names of your teammates.
+| Anirudh | Supabase planning and database table design | Database plan ready |
+| Arpit | Demo data planning | Sample city, area, survey, and volunteer data |
+| Arhan | Flexible UI support for whichever module is blocked | Small UI fixes, reusable components |
+| Abhay | Light documentation and testing checklist | Basic test cases and demo notes |
 
 ---
 
-## Detailed Work Plan For Next 3 Weeks
+## Phase 2: Supabase + ML Heatmap
 
-### Week 2: Supabase + Core Data
+**Dates:** June 2 - June 13  
+**Main goal:** By June 13, Supabase, survey data, ML risk scoring, and heatmap must be working.
 
-| Member | Responsibility | Detailed Work | Final Output |
-| --- | --- | --- | --- |
-| Aashita | Auth and layout | Connect login UI with Supabase Auth, build protected layout, sidebar, top navbar | Admin can login and see dashboard layout |
-| Ankit | Heatmap data structure | Create map page, define area coordinates, connect dummy risk data from Supabase | Heatmap page reads data from Supabase |
-| Arora | Surveys and volunteers | Build survey enquiry table, volunteer list, search, filters, status tags | Admin can view forms and volunteers |
-| Ansh | Tasks and analytics | Build task table, task status cards, basic analytics charts | Admin can view tasks and metrics |
-| Member 5 | Supabase database | Create tables: `profiles`, `survey_reports`, `volunteers`, `tasks`, `task_updates`, `area_risk_scores` | Working database schema |
-| Member 6 | Survey form flow | Build form submission page and insert data into `survey_reports` | Survey data is stored in Supabase |
-| Member 7 | Volunteer app | Build volunteer login, assigned task list, task details screen | Volunteer app UI connected to dummy task data |
-| Member 8 | Integration and QA | Test Supabase reads/writes, verify routes, create bug list | Stable Week 2 integration |
+This is the most important phase. If Supabase and ML heatmap are not complete by June 13, the whole project becomes risky.
 
-### Week 3: Heatmap + Task Assignment Flow
+### Phase 2 Team Work
 
 | Member | Responsibility | Detailed Work | Final Output |
 | --- | --- | --- | --- |
-| Aashita | Admin polish | Improve dashboard layout, profile page, navigation, responsive behavior | Professional admin shell |
-| Ankit | Heatmap | Implement risk score color logic, filter by city/problem/severity | Working crisis heatmap |
-| Arora | Survey management | Add survey detail view, status update, link survey to task creation | Admin can inspect survey and mark status |
-| Ansh | Task assignment | Build assign volunteer modal, priority tags, task detail view | Admin can assign work to volunteer |
-| Member 5 | Supabase policies | Add basic Row Level Security policies and table relationships | Safer database access |
-| Member 6 | Risk scoring model | Write risk score function using severity, report count, people affected | Risk score generated for heatmap |
-| Member 7 | Volunteer status update | Connect volunteer task status updates to Supabase | Volunteer can update task progress |
-| Member 8 | Testing and docs | Test complete flow from survey to task assignment | End-to-end flow documented |
+| Aashita | Auth and admin layout | Connect admin login with Supabase Auth, build protected routes, finalize sidebar, topbar, logout, and NGO admin profile | Admin can login and use protected dashboard layout |
+| Ankit | Heatmap UI | Build complete React Leaflet heatmap page, add markers, legends, filters, and map popups | Heatmap UI ready and waiting for ML risk data |
+| Arora | Surveys and volunteers | Connect `survey_reports` and `volunteers` tables to admin website, add search, filters, detail drawer, and status tags | Admin can view survey forms and volunteer records from Supabase |
+| Ansh | ML risk scoring and heatmap intelligence | Fetch survey data from Supabase, calculate risk score, risk level, heatmap color, and recommended priority; save output into `area_risk_scores` | ML/risk model completed and connected to heatmap data |
+| Anirudh | Supabase database lead | Create Supabase project, tables, relationships, primary keys, env setup, and basic policies | Working Supabase backend |
+| Arpit | Data support for ML and Supabase | Insert realistic demo data for cities, areas, problem types, severity, people affected, coordinates, volunteers, and tasks | Strong demo dataset for ML and heatmap |
+| Arhan | Integration support | Connect shared Supabase client, fix imports/routes, create reusable risk/priority/status tags, support heatmap integration | Frontend modules connect cleanly |
+| Abhay | QA and documentation | Test survey table, Supabase reads/writes, ML score output, heatmap filters, and risk colors; collect screenshots | Phase 2 bug list and screenshots |
 
-### Week 4: Reports + Final Demo
+### Phase 2 Day-Wise Plan
+
+| Date | Focus | Owners | Output |
+| --- | --- | --- | --- |
+| June 2 | Finalize Supabase schema and project setup | Anirudh + Arpit | Supabase project and table plan ready |
+| June 3 | Create tables and relationships | Anirudh | Database tables ready |
+| June 4 | Insert demo survey, volunteer, task, and area data | Arpit + Anirudh | Supabase has test data |
+| June 5 | Connect admin website to Supabase | Aashita + Arhan | Supabase client working in frontend |
+| June 6 | Display survey enquiries from Supabase | Arora | Admin can view survey forms |
+| June 7 | Build first ML risk scoring function | Ansh + Arpit | Risk score generated from survey data |
+| June 8 | Save ML output into `area_risk_scores` | Ansh + Anirudh | Risk scores stored in Supabase |
+| June 9 | Build heatmap UI | Ankit | Map renders risk locations |
+| June 10 | Connect heatmap with ML risk scores | Ankit + Ansh | Heatmap shows calculated area risk |
+| June 11 | Add filters, legends, and popups | Ankit | Heatmap is demo-friendly |
+| June 12 | Test full Supabase + ML + heatmap flow | Abhay + Arhan | Bugs identified and fixed |
+| June 13 | Phase 2 freeze and internal demo | Everyone | Supabase + ML heatmap completed |
+
+### Phase 2 Must-Have Deliverables
+
+| Deliverable | Owner |
+| --- | --- |
+| Supabase project and database tables | Anirudh |
+| Realistic survey and area data | Arpit |
+| Admin login and protected layout | Aashita |
+| Survey enquiry table connected to Supabase | Arora |
+| ML risk scoring model | Ansh |
+| Risk scores saved into Supabase | Ansh + Anirudh |
+| Heatmap connected to risk scores | Ankit |
+| Shared integration fixes | Arhan |
+| Testing checklist and screenshots | Abhay |
+
+---
+
+## Phase 3: Task Flow + Volunteer App
+
+| Member | Responsibility | Detailed Work | Final Output |
+| --- | --- | --- | --- |
+| Aashita | Admin shell polish | Improve dashboard layout, profile page, navigation, route guards, logout, and responsive behavior | Professional admin shell |
+| Ankit | Heatmap actions and activity | Add heatmap popup action like Create Task From Area; build recent activity feed from Supabase | Heatmap supports admin decisions |
+| Arora | Survey-to-task support | Add survey detail view, allow survey status update, link selected survey to task creation | Admin can inspect survey and convert it into a task |
+| Ansh | Task intelligence and ML priority | Use ML output to suggest task priority and required volunteer skills; build task table, assign modal, task detail view | Admin can assign high-risk work to volunteers |
+| Anirudh | Supabase task queries | Add task assignment relationships, volunteer task queries, task update queries, and realtime subscriptions if possible | Task data works across admin and volunteer app |
+| Arpit | Task and volunteer demo data | Prepare realistic volunteer skills, availability, locations, task records, and matching examples | Task assignment demo feels realistic |
+| Arhan | Volunteer app integration | Connect assigned task data between admin website and volunteer app; resolve merge conflicts | Volunteer can see assigned work |
+| Abhay | End-to-end testing | Test survey to risk score to heatmap to task to volunteer status update | Complete operational flow tested |
+
+### Phase 3 Date Plan
+
+| Date Range | Work | Owners | Output |
+| --- | --- | --- | --- |
+| June 14 - June 16 | Task table, task creation, survey-to-task conversion | Ansh + Arora + Arhan | Admin can create task from survey |
+| June 17 - June 19 | Volunteer app assigned task list and task details | Arhan + Abhay | Volunteer can view assigned tasks |
+| June 20 - June 21 | Admin assigns volunteer to task | Ansh + Arora | Task assigned to selected volunteer |
+| June 22 - June 23 | Volunteer updates task status | Arhan + Anirudh | Status saved to Supabase |
+| June 24 | Admin sees volunteer progress | Ansh + Aashita | Task progress visible in admin dashboard |
+| June 25 | Phase 3 integration demo | Everyone | Full survey-to-volunteer flow working |
+
+---
+
+## Phase 4: Reports + Final Demo
+
+**Dates:** June 25 - July 5  
+**Main goal:** Make the project presentation-ready with reports, analytics, final polish, deployment, and testing.
 
 | Member | Responsibility | Detailed Work | Final Output |
 | --- | --- | --- | --- |
 | Aashita | UI final polish | Fix spacing, colors, typography, mobile responsiveness | Clean final UI |
 | Ankit | Heatmap finalization | Add legends, filters, popup details, demo-ready data | Presentation-ready heatmap |
 | Arora | Surveys/volunteers finalization | Add final filters, empty states, loading states | Stable survey and volunteer module |
-| Ansh | Reports and analytics | Build charts, task reports, export button UI, completion metrics | Demo-ready analytics/report page |
-| Member 5 | Deployment | Deploy admin website and configure Supabase env variables | Live admin website |
-| Member 6 | Data preparation | Prepare realistic demo data for multiple cities and problems | Strong demo dataset |
-| Member 7 | Volunteer app finalization | Finalize volunteer app screens and task update flow | Demo-ready volunteer app |
-| Member 8 | Final presentation | Create README, screenshots, demo video/script, final testing checklist | Final submission package |
+| Ansh | ML reports and analytics | Build risk charts, task reports, completion metrics, ML explanation cards, and risk insight dashboard | Demo-ready ML analytics/report page |
+| Anirudh | Final database and deployment support | Verify Supabase tables, policies, environment variables, and production data | Stable backend for final demo |
+| Arpit | Demo data and risk results | Prepare realistic data for multiple cities, areas, problem types, and risk scores | Strong demo dataset for heatmap and reports |
+| Arhan | Final integration and UI fixes | Help all modules connect smoothly; fix route issues, broken imports, and inconsistent UI components | Integrated final project |
+| Abhay | Final QA and presentation help | Run manual tests, collect screenshots, help prepare demo script and final checklist | Clean final submission package |
+
+### Phase 4 Date Plan
+
+| Date Range | Work | Owners | Output |
+| --- | --- | --- | --- |
+| June 25 - June 27 | Reports and analytics dashboard | Ansh | Risk charts, task reports, completion metrics |
+| June 28 - June 29 | Final heatmap polish | Ankit | Legends, popups, filters, clean map UI |
+| June 30 | Survey and volunteer page polish | Arora | Stable tables, filters, loading states |
+| July 1 | Admin UI polish | Aashita | Consistent final design |
+| July 2 | Final database and env check | Anirudh | Stable Supabase setup |
+| July 3 | Final demo data and screenshots | Arpit + Abhay | Strong presentation dataset |
+| July 4 | Deployment and full testing | Arhan + Anirudh + Abhay | Deployed project and bug fixes |
+| July 5 | Final presentation/demo | Everyone | Final submission ready |
+
+---
+
+## Ansh ML Module
+
+Ansh owns the ML/risk intelligence part of the project.
+
+| ML Part | Description |
+| --- | --- |
+| Input | Survey reports from Supabase |
+| Fields Used | `city`, `area`, `problem_type`, `severity`, `people_affected`, `latitude`, `longitude` |
+| Processing | Convert severity to score, count reports by area, calculate affected population score |
+| Output | `risk_score`, `risk_level`, `heatmap_color`, `recommended_priority` |
+| Used By | Heatmap, task priority, analytics, reports |
+
+```text
+severityScore:
+Low = 25
+Medium = 50
+High = 75
+Critical = 100
+
+riskScore =
+  severityScore * 0.45 +
+  reportCountScore * 0.25 +
+  peopleAffectedScore * 0.20 +
+  problemTypeWeight * 0.10
+```
+
+```mermaid
+flowchart TD
+    A["Survey reports in Supabase"] --> B["Ansh ML Risk Scoring"]
+    B --> C["Area risk score"]
+    C --> D["Risk level"]
+    D --> E["Heatmap color"]
+    D --> F["Task priority"]
+    D --> G["Analytics reports"]
+```
 
 ---
 
@@ -297,11 +410,11 @@ In Week 1, everyone works on setup, research, UI skeletons, and small independen
 | Aashita | `src/features/auth/`, `src/features/profile/`, `src/components/layout/` |
 | Ankit | `src/features/heatmap/`, `src/features/activity/`, `src/components/maps/` |
 | Arora | `src/features/surveys/`, `src/features/volunteers/` |
-| Ansh | `src/features/tasks/`, `src/features/analytics/`, `src/features/reports/` |
-| Member 5 | `src/services/supabaseClient.ts`, Supabase SQL/schema |
-| Member 6 | `src/features/forms/`, `src/utils/riskScoring.ts`, demo data |
-| Member 7 | `volunteer-app/` or `src/mobile/` |
-| Member 8 | `docs/`, `README.md`, QA checklist, demo script |
+| Ansh | `src/features/ml/`, `src/features/tasks/`, `src/features/analytics/`, `src/features/reports/` |
+| Anirudh | `src/services/supabaseClient.ts`, Supabase SQL/schema, database policies |
+| Arpit | `src/utils/riskScoring.ts`, demo data, database seed records |
+| Arhan | Shared UI components, integration fixes, route support |
+| Abhay | `docs/`, QA checklist, screenshots, demo script |
 
 ---
 
@@ -312,11 +425,11 @@ In Week 1, everyone works on setup, research, UI skeletons, and small independen
 | Aashita | `feature/aashita-auth-profile-layout` |
 | Ankit | `feature/ankit-heatmap-activity` |
 | Arora | `feature/arora-surveys-volunteers` |
-| Ansh | `feature/ansh-tasks-analytics-reports` |
-| Member 5 | `feature/supabase-database` |
-| Member 6 | `feature/forms-risk-scoring` |
-| Member 7 | `feature/volunteer-app` |
-| Member 8 | `feature/docs-testing-demo` |
+| Ansh | `feature/ansh-ml-tasks-analytics-reports` |
+| Anirudh | `feature/anirudh-supabase-database` |
+| Arpit | `feature/arpit-risk-data-support` |
+| Arhan | `feature/arhan-integration-ui-support` |
+| Abhay | `feature/abhay-testing-docs` |
 
 ---
 
@@ -350,7 +463,7 @@ flowchart TD
 
 ## Final Goal
 
-By the end of the month, the project should clearly show:
+By July 5, the project should clearly show:
 
 - A survey form stores data in Supabase.
 - Admin website displays submitted forms.
@@ -361,4 +474,3 @@ By the end of the month, the project should clearly show:
 - Admin sees reports and analytics.
 
 That is enough to demonstrate a complete, realistic, and understandable working system.
-

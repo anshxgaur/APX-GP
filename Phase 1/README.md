@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Heatmap-Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white" alt="Leaflet" />
 </p>
 
----
+----
 
 ## Project In Simple Words
 
@@ -24,7 +24,7 @@ In one line:
 
 > SevaAI collects community problems, shows risky areas on a heatmap, and helps admins assign volunteers to solve them.
 
----
+----
 
 ## Simple Example
 

@@ -18,6 +18,18 @@ import com.yourname.sra.utils.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Splash screen fragment that handles initial session check and routing.
+ * 
+ * Session Check Flow (Requirements 3.1, 3.2, 3.3):
+ * 1. Display splash screen for 1.5 seconds
+ * 2. Check for existing valid session via AuthRepository.isLoggedIn()
+ * 3. Navigate to Dashboard if session exists (Req 3.2)
+ * 4. Navigate to Login if no session exists (Req 3.3)
+ * 
+ * Note: Session persistence is automatic via Supabase GoTrue.
+ * Sessions are stored in SharedPreferences and restored on app restart.
+ */
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
@@ -38,9 +50,10 @@ class SplashFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Delay 1.5 seconds then check session
-        Handler(Looper.getMainLooper()).postDelayed({
+        viewLifecycleOwner.lifecycleScope.launch {
+            kotlinx.coroutines.delay(1500)
             viewModel.checkSession()
-        }, 1500)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {

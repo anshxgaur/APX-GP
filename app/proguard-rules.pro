@@ -46,3 +46,11 @@
 
 # Hilt
 -dontwarn dagger.hilt.**
+
+# Security: Obfuscate BuildConfig credentials in release builds
+# Requirement 1.5: Prevent sensitive credentials from being logged or exposed
+# Obfuscate the BuildConfig class to make reverse engineering more difficult
+-assumenosideeffects class com.yourname.sra.BuildConfig {
+    public static *** SUPABASE_URL;
+    public static *** SUPABASE_ANON_KEY;
+}

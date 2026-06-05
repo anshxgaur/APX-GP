@@ -6,8 +6,10 @@ import com.yourname.sra.data.repository.AuthRepository
 import com.yourname.sra.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +26,14 @@ class AuthViewModel @Inject constructor(
 
     private val _sessionState = MutableStateFlow<UiState<Boolean>>(UiState.Loading)
     val sessionState: StateFlow<UiState<Boolean>> = _sessionState.asStateFlow()
+
+    // Observe session status to handle expiration during app usage
+    val isSessionActive: StateFlow<Boolean> = authRepository.observeSessionStatus()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = true
+        )
 
     fun checkSession() {
         viewModelScope.launch {
@@ -80,6 +90,23 @@ class AuthViewModel @Inject constructor(
                 onFailure = { exception ->
                     _signUpState.value = UiState.Error(
                         exception.localizedMessage ?: "Registration failed. Please try again."
+                    )
+                }
+            )
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            _loginState.value = UiState.Loading
+            val result = authRepository.logout()
+            result.fold(
+                onSuccess = {
+                    _loginState.value = UiState.Success(Unit)
+                },
+                onFailure = { exception ->
+                    _loginState.value = UiState.Error(
+                        exception.localizedMessage ?: "Logout failed. Please try again."
                     )
                 }
             )

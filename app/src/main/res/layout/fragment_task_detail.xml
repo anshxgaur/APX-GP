@@ -256,6 +256,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
 
+                <!-- Assigned Volunteer -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/task_detail_assigned_volunteer"
+                    style="@style/TextAppearance.SRA.Caption" />
+
+                <TextView
+                    android:id="@+id/tvAssignedVolunteer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    style="@style/TextAppearance.SRA.Body" />
+
                 <!-- Timestamps -->
                 <TextView
                     android:id="@+id/tvStartedAtLabel"
@@ -346,6 +361,126 @@
                         style="@style/TextAppearance.SRA.Body"
                         android:textColor="@color/text_secondary" />
                 </LinearLayout>
+
+                <!-- Task Updates Section -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/task_detail_updates"
+                    style="@style/TextAppearance.SRA.Body"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="18sp" />
+
+                <!-- Post Update Card (visible for ongoing tasks) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardPostUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/task_detail_post_update"
+                            style="@style/TextAppearance.SRA.Body"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:hint="@string/task_detail_update_text_hint">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etUpdateText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textMultiLine"
+                                android:minLines="2"
+                                android:gravity="top" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_vertical">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnSelectPhoto"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/task_detail_select_photo"
+                                style="@style/Widget.SRA.Button.Outlined"
+                                app:icon="@android:drawable/ic_menu_camera"
+                                app:iconGravity="textStart" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnPostUpdate"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="@string/task_detail_post"
+                                app:icon="@android:drawable/ic_menu_send"
+                                app:iconGravity="textStart" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvSelectedPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/task_detail_no_photo_selected"
+                            android:textSize="12sp"
+                            android:textColor="@color/text_secondary"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Updates Loading Indicator -->
+                <ProgressBar
+                    android:id="@+id/progressBarUpdates"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    android:indeterminateTint="@color/primary" />
+
+                <!-- No Updates Message -->
+                <TextView
+                    android:id="@+id/tvNoUpdates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/task_detail_no_updates"
+                    android:textColor="@color/text_secondary"
+                    android:textAlignment="center"
+                    android:visibility="gone" />
+
+                <!-- Updates List -->
+                <LinearLayout
+                    android:id="@+id/layoutUpdates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone" />
 
                 <!-- Action Button -->
                 <com.google.android.material.button.MaterialButton

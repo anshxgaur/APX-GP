@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -49,11 +50,28 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBackNavigation()
         setupRecyclerView()
         setupSwipeRefresh()
         observeState()
 
         viewModel.loadDashboard()
+    }
+
+    /**
+     * Prevents back navigation to LoginFragment (Requirement 35.4).
+     * Dashboard is a root screen - back button should minimize app.
+     */
+    private fun setupBackNavigation() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Move app to background instead of navigating back
+                    requireActivity().moveTaskToBack(true)
+                }
+            }
+        )
     }
 
     private fun setupRecyclerView() {
@@ -74,6 +92,11 @@ class DashboardFragment : Fragment() {
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setColorSchemeResources(R.color.primary, R.color.accent)
         binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadDashboard()
+        }
+        
+        // Retry button for error state
+        binding.btnRetry.setOnClickListener {
             viewModel.loadDashboard()
         }
     }
@@ -141,12 +164,15 @@ class DashboardFragment : Fragment() {
         binding.tvTasksCompleted.text = data.volunteer.totalTasksCompleted.toString()
         binding.tvHoursContributed.text = data.volunteer.totalHours.toString()
 
-        // Active Task
+        // Active Task - Requirement 34.3: Handle null assigned_volunteer
         if (data.ongoingTask != null) {
             binding.cardActiveTask.show()
             binding.tvNoActiveTask.hide()
             binding.tvActiveTaskTitle.text = data.ongoingTask.title
-            binding.tvActiveTaskLocation.text = data.ongoingTask.locationName
+            // Requirement 34.3: Display "Not specified" when locationName is empty
+            binding.tvActiveTaskLocation.text = data.ongoingTask.locationName.ifEmpty { 
+                getString(R.string.location_not_specified) 
+            }
             val urgencyColor = ContextCompat.getColor(
                 requireContext(), getUrgencyColorRes(data.ongoingTask.urgency)
             )
@@ -172,7 +198,7 @@ class DashboardFragment : Fragment() {
             binding.tvNoUrgentTasks.show()
         }
 
-        // Recent Surveys
+        // Recent Surveys - Requirement 34.2: Handle null photo_url by not displaying image
         if (data.recentSurveys.isNotEmpty()) {
             binding.layoutRecentSurveys.show()
             binding.tvNoRecentSurveys.hide()
@@ -183,7 +209,10 @@ class DashboardFragment : Fragment() {
             if (survey1 != null) {
                 binding.cardSurvey1.show()
                 binding.tvSurvey1Category.text = survey1.category
-                binding.tvSurvey1Location.text = survey1.locationName
+                // Requirement 34.2: Handle empty locationName gracefully
+                binding.tvSurvey1Location.text = survey1.locationName.ifEmpty { 
+                    getString(R.string.location_not_specified) 
+                }
                 binding.tvSurvey1Status.text = survey1.status.replaceFirstChar { it.uppercase() }
             } else {
                 binding.cardSurvey1.hide()
@@ -192,7 +221,10 @@ class DashboardFragment : Fragment() {
             if (survey2 != null) {
                 binding.cardSurvey2.show()
                 binding.tvSurvey2Category.text = survey2.category
-                binding.tvSurvey2Location.text = survey2.locationName
+                // Requirement 34.2: Handle empty locationName gracefully
+                binding.tvSurvey2Location.text = survey2.locationName.ifEmpty { 
+                    getString(R.string.location_not_specified) 
+                }
                 binding.tvSurvey2Status.text = survey2.status.replaceFirstChar { it.uppercase() }
             } else {
                 binding.cardSurvey2.hide()

@@ -162,6 +162,7 @@ class SignupFragment : Fragment() {
                             binding.btnSignup.setLoadingState(false)
                             binding.progressBar.visibility = View.GONE
                             binding.root.showSuccessSnackbar(getString(R.string.signup_success))
+                            clearForm()
                             viewModel.resetSignUpState()
                             findNavController().navigate(
                                 R.id.action_signupFragment_to_dashboardFragment
@@ -181,6 +182,30 @@ class SignupFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun clearForm() {
+        binding.etFullName.text?.clear()
+        binding.etEmail.text?.clear()
+        binding.etPassword.text?.clear()
+        binding.etConfirmPassword.text?.clear()
+        binding.etPhone.text?.clear()
+        binding.etArea.text?.clear()
+        binding.actvAvailability.setText(Constants.AVAILABILITY_OPTIONS[0], false)
+        
+        // Clear all skill chips
+        for (i in 0 until binding.chipGroupSkills.childCount) {
+            val chip = binding.chipGroupSkills.getChildAt(i) as? Chip
+            chip?.isChecked = false
+        }
+        
+        // Clear any validation errors
+        binding.tilFullName.error = null
+        binding.tilEmail.error = null
+        binding.tilPassword.error = null
+        binding.tilConfirmPassword.error = null
+        binding.tilPhone.error = null
+        binding.tilArea.error = null
     }
 
     override fun onDestroyView() {

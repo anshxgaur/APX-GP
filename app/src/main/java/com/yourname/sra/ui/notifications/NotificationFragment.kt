@@ -66,6 +66,7 @@ class NotificationFragment : Fragment() {
     }
 
     private fun observeState() {
+        // Observe notification state changes
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.notificationsState.collect { state ->
@@ -100,6 +101,21 @@ class NotificationFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        // Subscribe to realtime notification changes in lifecycle-aware manner
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.notificationChanges.collect {
+                    // Realtime change detected, refresh handled by ViewModel automatically
+                    // This ensures the UI stays in sync with database changes
+                }
+            }
+        }
+
+        // Setup retry button
+        binding.btnRetry.setOnClickListener {
+            viewModel.loadNotifications()
         }
     }
 

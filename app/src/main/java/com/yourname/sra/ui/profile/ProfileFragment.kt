@@ -53,7 +53,7 @@ class ProfileFragment : Fragment() {
                     inputStream?.close()
                     if (bytes != null) {
                         val fileName = "profile_${currentVolunteer?.id ?: UUID.randomUUID()}.jpg"
-                        viewModel.uploadPhoto(bytes, fileName)
+                        viewModel.uploadProfilePhoto(bytes, fileName)
                     }
                 } catch (e: Exception) {
                     binding.root.showErrorSnackbar("Failed to read image")
@@ -165,13 +165,17 @@ class ProfileFragment : Fragment() {
         binding.etArea.setText(volunteer.area)
         binding.actvAvailability.setText(volunteer.availability, false)
 
-        // Profile photo
+        // Profile photo - Requirement 34.1: Show default avatar placeholder when profile_photo_url is null
         if (!volunteer.profilePhotoUrl.isNullOrEmpty()) {
             Glide.with(this)
                 .load(volunteer.profilePhotoUrl)
                 .circleCrop()
                 .placeholder(R.drawable.ic_person_placeholder)
+                .error(R.drawable.ic_person_placeholder)
                 .into(binding.ivProfilePhoto)
+        } else {
+            // Display default avatar placeholder when profile_photo_url is null
+            binding.ivProfilePhoto.setImageResource(R.drawable.ic_person_placeholder)
         }
 
         // Skills
@@ -258,12 +262,21 @@ class ProfileFragment : Fragment() {
                     viewModel.logoutState.collect { state ->
                         when (state) {
                             is UiState.Success -> {
+                                // Logout succeeded, navigate to login
                                 findNavController().navigate(
                                     R.id.action_profileFragment_to_loginFragment
                                 )
                             }
                             is UiState.Error -> {
+                                // Display error message but still navigate
+                                // Local session has been cleared
                                 binding.root.showErrorSnackbar(state.message)
+                                
+                                // Navigate to login after showing error
+                                // This ensures user is logged out locally even if remote logout failed
+                                findNavController().navigate(
+                                    R.id.action_profileFragment_to_loginFragment
+                                )
                             }
                             else -> {}
                         }

@@ -65,17 +65,22 @@ class SurveyFragment : Fragment() {
                 Glide.with(this).load(uri).centerCrop().into(binding.ivSurveyPhoto)
                 binding.btnAddPhoto.text = getString(R.string.survey_change_photo)
 
-                // Upload photo
+                // Upload photo with compression (Requirement 5.1, 29.1, 29.2, 29.3, 29.4)
                 try {
+                    // Convert URI to Bitmap
                     val inputStream = requireContext().contentResolver.openInputStream(uri)
-                    val bytes = inputStream?.readBytes()
+                    val bitmap = android.graphics.BitmapFactory.decodeStream(inputStream)
                     inputStream?.close()
-                    if (bytes != null) {
+                    
+                    if (bitmap != null) {
                         val fileName = "survey_${UUID.randomUUID()}.jpg"
-                        viewModel.uploadPhoto(bytes, fileName)
+                        // Call uploadPhoto(Bitmap, String) to ensure ImageUtils.compressImage() is used
+                        viewModel.uploadPhoto(bitmap, fileName)
+                    } else {
+                        binding.root.showErrorSnackbar("Failed to read image")
                     }
                 } catch (e: Exception) {
-                    binding.root.showErrorSnackbar("Failed to read image")
+                    binding.root.showErrorSnackbar("Failed to read image: ${e.localizedMessage}")
                 }
             }
         }
@@ -98,6 +103,18 @@ class SurveyFragment : Fragment() {
         setupSeveritySlider()
         setupClickListeners()
         observeState()
+        
+        // Automatically capture GPS location on form open (Requirement 30.1, 30.2, 30.5)
+        if (locationHelper.hasLocationPermission()) {
+            captureLocation()
+        } else {
+            locationPermissionRequest.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
     }
 
     private fun setupCategoryDropdown() {
@@ -222,6 +239,7 @@ class SurveyFragment : Fragment() {
                                 binding.btnSubmit.setLoadingState(false)
                                 binding.progressBar.hide()
                                 binding.root.showSuccessSnackbar(getString(R.string.survey_success))
+                                clearForm() // Clear form after successful submission (Requirement 5.5)
                                 viewModel.resetSubmitState()
                                 findNavController().navigate(R.id.dashboardFragment)
                             }
@@ -259,6 +277,33 @@ class SurveyFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Clear all form fields after successful submission.
+     * Requirement 5.5: Display success message and clear form
+     */
+    private fun clearForm() {
+        binding.actvCategory.text.clear()
+        binding.etDescription.text?.clear()
+        binding.etLocationName.text?.clear()
+        binding.etPeopleAffected.text?.clear()
+        binding.sliderSeverity.value = 1f
+        binding.tvSeverityValue.text = getString(R.string.survey_severity_minor)
+        binding.tvGpsCoordinates.text = getString(R.string.survey_gps_placeholder)
+        binding.ivSurveyPhoto.hide()
+        binding.btnAddPhoto.text = getString(R.string.survey_add_photo)
+        selectedImageUri = null
+        
+        // Clear validation errors
+        binding.tilCategory.error = null
+        binding.tilPeopleAffected.error = null
+        binding.tilLocationName.error = null
+        
+        // Re-capture GPS for next survey
+        if (locationHelper.hasLocationPermission()) {
+            captureLocation()
         }
     }
 

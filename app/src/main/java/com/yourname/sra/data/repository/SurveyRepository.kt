@@ -1,5 +1,6 @@
 package com.yourname.sra.data.repository
 
+import android.util.Log
 import com.yourname.sra.data.model.Survey
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
@@ -90,13 +91,15 @@ class SurveyRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadPhoto(imageBytes: ByteArray, fileName: String): Result<String> {
+    suspend fun uploadPhoto(userId: String, imageBytes: ByteArray, fileName: String): Result<String> {
         return try {
             val bucket = supabaseClient.storage.from("survey-photos")
-            bucket.upload(fileName, imageBytes, upsert = true)
-            val publicUrl = bucket.publicUrl(fileName)
+            val path = "$userId/$fileName"
+            bucket.upload(path, imageBytes, upsert = true)
+            val publicUrl = bucket.publicUrl(path)
             Result.success(publicUrl)
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to upload survey photo", e)
             Result.failure(e)
         }
     }
@@ -107,5 +110,9 @@ class SurveyRepository @Inject constructor(
         return channel.postgresChangeFlow<PostgresAction>(schema = "public") {
             table = "surveys"
         }
+    }
+
+    companion object {
+        private const val TAG = "SurveyRepository"
     }
 }

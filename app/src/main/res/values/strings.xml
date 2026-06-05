@@ -125,6 +125,21 @@
     <string name="task_detail_complete_success">Task marked as complete!</string>
     <string name="task_detail_error">Failed to perform action. Please try again.</string>
     <string name="task_detail_status">Status</string>
+    <string name="task_detail_assigned_volunteer">Assigned To</string>
+    <string name="task_detail_unassigned">Unassigned</string>
+    <string name="task_detail_no_notes">No notes</string>
+    <string name="task_detail_no_description">No description provided</string>
+    <string name="task_detail_updates">Task Updates</string>
+    <string name="task_detail_no_updates">No updates yet</string>
+    <string name="task_detail_update_by">By: %1$s</string>
+    <string name="task_detail_post_update">Post an Update</string>
+    <string name="task_detail_update_text_hint">What\'s the progress?</string>
+    <string name="task_detail_select_photo">Add Photo</string>
+    <string name="task_detail_post">Post</string>
+    <string name="task_detail_no_photo_selected">No photo selected</string>
+    <string name="task_detail_photo_selected">Photo selected: %1$s</string>
+    <string name="task_detail_update_posted">Update posted</string>
+    <string name="task_detail_update_failed">Failed to post update</string>
 
     <!-- Profile -->
     <string name="profile_title">My Profile</string>
@@ -189,6 +204,7 @@
     <string name="submit">Submit</string>
     <string name="empty_state_title">Nothing here yet</string>
     <string name="empty_state_message">Content will appear once it\'s available</string>
+    <string name="location_not_specified">Location not specified</string>
     <string name="location_permission_required">Location permission is required to capture GPS coordinates</string>
     <string name="camera_permission_required">Camera permission is required to take photos</string>
 

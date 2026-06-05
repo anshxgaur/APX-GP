@@ -1,10 +1,12 @@
 package com.yourname.sra.ui.profile
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yourname.sra.data.model.Volunteer
 import com.yourname.sra.data.repository.AuthRepository
 import com.yourname.sra.data.repository.ProfileRepository
+import com.yourname.sra.utils.ImageUtils
 import com.yourname.sra.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,13 +74,32 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun uploadPhoto(imageBytes: ByteArray, fileName: String) {
+    fun uploadProfilePhoto(imageBytes: ByteArray, fileName: String) {
         viewModelScope.launch {
             _photoUploadState.value = UiState.Loading
-            val result = profileRepository.uploadProfilePhoto(imageBytes, fileName)
-            result.fold(
+            val userId = authRepository.getCurrentUserId()
+            if (userId == null) {
+                _photoUploadState.value = UiState.Error("User not logged in")
+                return@launch
+            }
+            
+            // Step 1: Upload photo to storage
+            val uploadResult = profileRepository.uploadProfilePhoto(userId, imageBytes, fileName)
+            uploadResult.fold(
                 onSuccess = { url ->
-                    _photoUploadState.value = UiState.Success(url)
+                    // Step 2: Update profile with the new photo URL
+                    val updateResult = profileRepository.updateProfilePhotoUrl(userId, url)
+                    updateResult.fold(
+                        onSuccess = {
+                            _photoUploadState.value = UiState.Success(url)
+                            loadProfile() // Refresh profile to show new photo
+                        },
+                        onFailure = { e ->
+                            _photoUploadState.value = UiState.Error(
+                                e.localizedMessage ?: "Failed to update profile with photo"
+                            )
+                        }
+                    )
                 },
                 onFailure = { e ->
                     _photoUploadState.value = UiState.Error(
@@ -86,6 +107,36 @@ class ProfileViewModel @Inject constructor(
                     )
                 }
             )
+        }
+    }
+
+    /**
+     * Upload profile photo with automatic compression using ImageUtils.
+     * Compresses bitmap to under 2MB before uploading.
+     * 
+     * @param bitmap The bitmap to upload
+     * @param fileName The file name to use for storage
+     * 
+     * Requirements: 18.1, 18.2, 18.3, 18.4, 18.5
+     */
+    fun uploadProfilePhoto(bitmap: Bitmap, fileName: String) {
+        viewModelScope.launch {
+            _photoUploadState.value = UiState.Loading
+            
+            try {
+                // Compress image using ImageUtils
+                val compressedBytes = ImageUtils.compressImage(bitmap)
+                
+                // Upload the compressed photo
+                uploadProfilePhoto(compressedBytes, fileName)
+            } catch (e: IllegalStateException) {
+                // Image too large after compression
+                _photoUploadState.value = UiState.Error("Image file too large")
+            } catch (e: Exception) {
+                _photoUploadState.value = UiState.Error(
+                    e.localizedMessage ?: "Failed to compress image"
+                )
+            }
         }
     }
 
@@ -108,5 +159,9 @@ class ProfileViewModel @Inject constructor(
 
     fun resetUpdateState() {
         _updateState.value = UiState.Empty
+    }
+
+    fun resetPhotoUploadState() {
+        _photoUploadState.value = UiState.Empty
     }
 }

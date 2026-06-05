@@ -70,6 +70,14 @@ class RiskScoreRepository @Inject constructor(
      * Batch save multiple risk scores at once.
      */
     suspend fun saveRiskScores(scores: List<AreaRiskScore>): Result<Unit> {
+        // Validate all scores before inserting
+        scores.forEach { score ->
+            require(score.riskScore in 0f..10f) { "Risk score must be between 0 and 10" }
+            require(score.latitude in -90.0..90.0) { "Invalid latitude" }
+            require(score.longitude in -180.0..180.0) { "Invalid longitude" }
+            require(score.riskLevel in listOf("low", "medium", "high", "critical")) { "Invalid risk level" }
+        }
+
         return try {
             val records = scores.map { score ->
                 mapOf(
@@ -105,7 +113,7 @@ class RiskScoreRepository @Inject constructor(
     /**
      * Get all risk scores, ordered by highest risk first.
      */
-    suspend fun getRiskScores(): Result<List<AreaRiskScore>> {
+    suspend fun getAllRiskScores(): Result<List<AreaRiskScore>> {
         return try {
             val scores = supabaseClient.postgrest.from("area_risk_scores")
                 .select {

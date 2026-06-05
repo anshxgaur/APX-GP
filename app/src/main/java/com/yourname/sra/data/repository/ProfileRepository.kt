@@ -1,5 +1,7 @@
 package com.yourname.sra.data.repository
 
+import android.util.Log
+
 import com.yourname.sra.data.model.Volunteer
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
@@ -72,14 +74,39 @@ class ProfileRepository @Inject constructor(
         }
     }
 
-    suspend fun uploadProfilePhoto(imageBytes: ByteArray, fileName: String): Result<String> {
+    suspend fun uploadProfilePhoto(userId: String, imageBytes: ByteArray, fileName: String): Result<String> {
         return try {
             val bucket = supabaseClient.storage.from("profile-photos")
-            bucket.upload(fileName, imageBytes, upsert = true)
-            val publicUrl = bucket.publicUrl(fileName)
+            val path = "$userId/$fileName"
+            bucket.upload(path, imageBytes, upsert = true)
+            val publicUrl = bucket.publicUrl(path)
             Result.success(publicUrl)
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to upload profile photo", e)
             Result.failure(e)
         }
+    }
+
+    suspend fun updateProfilePhotoUrl(userId: String, photoUrl: String): Result<Unit> {
+        return try {
+            supabaseClient.postgrest.from("volunteers").update(
+                {
+                    set("profile_photo_url", photoUrl)
+                    set("updated_at", Instant.now().toString())
+                }
+            ) {
+                filter {
+                    eq("id", userId)
+                }
+            }
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to update profile photo URL", e)
+            Result.failure(e)
+        }
+    }
+
+    companion object {
+        private const val TAG = "ProfileRepository"
     }
 }

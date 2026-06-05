@@ -36,7 +36,10 @@ class TaskAdapter(
         fun bind(task: Task) {
             binding.tvTitle.text = task.title
             binding.tvCategory.text = task.category
-            binding.tvLocation.text = task.locationName.ifEmpty { "Location not specified" }
+            // Requirement 34.2: Handle empty locationName gracefully
+            binding.tvLocation.text = task.locationName.ifEmpty { 
+                binding.root.context.getString(R.string.location_not_specified) 
+            }
             binding.tvEstimatedHours.text = binding.root.context.getString(
                 R.string.tasks_hours, task.estimatedHours
             )
@@ -48,7 +51,7 @@ class TaskAdapter(
             binding.viewUrgencyDot.background.setTint(urgencyColor)
             binding.tvUrgencyLabel.text = getUrgencyLabel(task.urgency)
 
-            // Skills chips
+            // Skills chips - handle empty required skills
             binding.chipGroupSkills.removeAllViews()
             task.requiredSkills.take(3).forEach { skill ->
                 val chip = Chip(binding.root.context).apply {

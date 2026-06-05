@@ -4,6 +4,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.yourname.sra.R
+import java.io.IOException
+import java.net.SocketTimeoutException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -132,4 +134,34 @@ fun getStatusColorRes(status: String): Int {
 fun View.setLoadingState(isLoading: Boolean) {
     isEnabled = !isLoading
     alpha = if (isLoading) 0.6f else 1.0f
+}
+
+// Error message mapping extension
+// Maps Throwable exceptions to user-friendly error messages
+// Requirements: 2.3, 2.6, 27.1, 27.2, 27.3
+fun Throwable.toUserMessage(): String = when {
+    // Network connectivity errors - IOException and network-related messages
+    this is IOException || message?.contains("network", ignoreCase = true) == true ||
+    message?.contains("connection", ignoreCase = true) == true ->
+        "Network error. Please check your connection."
+    
+    // Timeout errors - SocketTimeoutException or timeout in message
+    this is SocketTimeoutException || message?.contains("timeout", ignoreCase = true) == true ->
+        "Request timed out. Please try again."
+    
+    // Duplicate email error during signup
+    message?.contains("already exists", ignoreCase = true) == true ||
+    message?.contains("duplicate", ignoreCase = true) == true ||
+    message?.contains("unique constraint", ignoreCase = true) == true ->
+        "Email already registered"
+    
+    // Invalid credentials during login
+    message?.contains("invalid", ignoreCase = true) == true ||
+    message?.contains("credentials", ignoreCase = true) == true ||
+    message?.contains("authentication failed", ignoreCase = true) == true ||
+    message?.contains("unauthorized", ignoreCase = true) == true ->
+        "Invalid email or password"
+    
+    // Generic fallback for unmapped errors
+    else -> message ?: "An unexpected error occurred. Please try again."
 }

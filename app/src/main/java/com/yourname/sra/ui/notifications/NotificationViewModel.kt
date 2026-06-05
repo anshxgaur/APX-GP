@@ -7,8 +7,12 @@ import com.yourname.sra.data.repository.AuthRepository
 import com.yourname.sra.data.repository.NotificationRepository
 import com.yourname.sra.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jan.supabase.realtime.PostgresAction
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,6 +28,20 @@ class NotificationViewModel @Inject constructor(
 
     private val _unreadCount = MutableStateFlow(0)
     val unreadCount: StateFlow<Int> = _unreadCount.asStateFlow()
+
+    private val _notificationChanges = MutableSharedFlow<PostgresAction>()
+    val notificationChanges: SharedFlow<PostgresAction> = _notificationChanges.asSharedFlow()
+
+    init {
+        // Subscribe to realtime notification changes
+        viewModelScope.launch {
+            notificationRepository.subscribeNotificationChanges().collect { action ->
+                _notificationChanges.emit(action)
+                // Auto-refresh notifications on any change
+                loadNotifications()
+            }
+        }
+    }
 
     fun loadNotifications() {
         viewModelScope.launch {

@@ -47,8 +47,10 @@ class TaskListFragment : Fragment() {
         setupRecyclerView()
         setupSwipeRefresh()
         observeState()
+        observeRealtimeChanges()
 
-        viewModel.loadTasks(currentStatus)
+        // Load initial tasks
+        loadCurrentTasks()
     }
 
     private fun setupTabs() {
@@ -64,12 +66,12 @@ class TaskListFragment : Fragment() {
                     2 -> Constants.TaskStatus.COMPLETED
                     else -> Constants.TaskStatus.OPEN
                 }
-                viewModel.loadTasks(currentStatus)
+                loadCurrentTasks()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                viewModel.loadTasks(currentStatus)
+                loadCurrentTasks()
             }
         })
     }
@@ -94,7 +96,35 @@ class TaskListFragment : Fragment() {
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setColorSchemeResources(R.color.primary, R.color.accent)
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadTasks(currentStatus)
+            loadCurrentTasks()
+        }
+    }
+
+    /**
+     * Load tasks based on current status filter
+     */
+    private fun loadCurrentTasks() {
+        if (currentStatus == Constants.TaskStatus.OPEN) {
+            viewModel.getOpenTasks()
+        } else {
+            viewModel.getMyTasks(currentStatus)
+        }
+        // Also observe cached tasks for offline support
+        viewModel.observeCachedTasks(currentStatus)
+    }
+
+    /**
+     * Observe realtime task changes
+     * Implements Requirement 20.1, 20.2, 20.3: Subscribe to task changes and refresh on change
+     */
+    private fun observeRealtimeChanges() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.taskChanges.collect { action ->
+                    // Refresh tasks when any task change is detected
+                    viewModel.refreshCurrentTasks()
+                }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import com.yourname.sra.data.local.AppDatabase
 import com.yourname.sra.data.local.TaskDao
 import com.yourname.sra.data.remote.SupabaseClientProvider
 import com.yourname.sra.data.repository.AuthRepository
+import com.yourname.sra.data.repository.MLBridgeRepository
 import com.yourname.sra.data.repository.NotificationRepository
 import com.yourname.sra.data.repository.ProfileRepository
 import com.yourname.sra.data.repository.RiskScoreRepository
@@ -50,8 +51,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(supabaseClient: SupabaseClient): AuthRepository {
-        return AuthRepository(supabaseClient)
+    fun provideAuthRepository(supabaseClient: SupabaseClient, taskDao: TaskDao): AuthRepository {
+        return AuthRepository(supabaseClient, taskDao)
     }
 
     @Provides
@@ -91,5 +92,14 @@ object AppModule {
     @Singleton
     fun provideTaskUpdateRepository(supabaseClient: SupabaseClient): TaskUpdateRepository {
         return TaskUpdateRepository(supabaseClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMLBridgeRepository(
+        surveyRepository: SurveyRepository,
+        riskScoreRepository: RiskScoreRepository
+    ): MLBridgeRepository {
+        return MLBridgeRepository(surveyRepository, riskScoreRepository)
     }
 }

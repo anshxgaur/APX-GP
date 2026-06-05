@@ -16,6 +16,24 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 
+// Validate required Supabase credentials
+val supabaseUrl = localProperties.getProperty("SUPABASE_URL", "")
+val supabaseAnonKey = localProperties.getProperty("SUPABASE_ANON_KEY", "")
+
+if (supabaseUrl.isEmpty()) {
+    throw GradleException(
+        "SUPABASE_URL not configured. Please add it to local.properties file.\n" +
+        "Example: SUPABASE_URL=https://your-project.supabase.co"
+    )
+}
+
+if (supabaseAnonKey.isEmpty()) {
+    throw GradleException(
+        "SUPABASE_ANON_KEY not configured. Please add it to local.properties file.\n" +
+        "Example: SUPABASE_ANON_KEY=your_anon_key_here"
+    )
+}
+
 android {
     namespace = "com.yourname.sra"
     compileSdk = 34
@@ -30,14 +48,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // Supabase config from local.properties
-        buildConfigField(
-            "String", "SUPABASE_URL",
-            "\"${localProperties.getProperty("SUPABASE_URL", "")}\""
-        )
-        buildConfigField(
-            "String", "SUPABASE_ANON_KEY",
-            "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "")}\""
-        )
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_ANON_KEY", "\"$supabaseAnonKey\"")
+        
         // Maps API key
         val mapsApiKey = localProperties.getProperty("MAPS_API_KEY", "")
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
@@ -45,7 +58,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -126,6 +139,9 @@ dependencies {
 
     // Testing
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

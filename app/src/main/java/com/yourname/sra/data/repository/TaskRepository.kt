@@ -5,6 +5,7 @@ import com.yourname.sra.data.local.TaskEntity
 import com.yourname.sra.data.model.Task
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.postgrest.query.Order
 import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
@@ -124,6 +125,15 @@ class TaskRepository @Inject constructor(
 
     suspend fun completeTask(taskId: String, note: String): Result<Unit> {
         return try {
+            // First, get the task to find the assigned volunteer
+            val taskResult = getTaskById(taskId)
+            val task = taskResult.getOrNull()
+                ?: return Result.failure(Exception("Task not found"))
+            
+            val volunteerId = task.assignedVolunteer
+                ?: return Result.failure(Exception("Task has no assigned volunteer"))
+            
+            // Update task status
             val now = Instant.now().toString()
             supabaseClient.postgrest.from("tasks").update(
                 {
@@ -137,6 +147,12 @@ class TaskRepository @Inject constructor(
                     eq("id", taskId)
                 }
             }
+            
+            // Call RPC to increment tasks completed for the volunteer
+            supabaseClient.postgrest.rpc("increment_tasks_completed", mapOf(
+                "volunteer_id" to volunteerId
+            ))
+            
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)

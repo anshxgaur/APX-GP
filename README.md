@@ -34,7 +34,7 @@ Thousands of NGOs across India still rely on:
 * Delayed decision making
 * Inefficient volunteer allocation
 
-This results in:
+ This results in:
 
 ❌ Lost data
 

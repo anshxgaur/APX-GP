@@ -51,7 +51,8 @@ class SurveyFragment : Fragment() {
         if (fineGranted || coarseGranted) {
             captureLocation()
         } else {
-            binding.root.showErrorSnackbar(getString(R.string.location_permission_required))
+            val safeBinding = _binding ?: return@registerForActivityResult
+            safeBinding.root.showErrorSnackbar(getString(R.string.location_permission_required))
         }
     }
 
@@ -60,10 +61,11 @@ class SurveyFragment : Fragment() {
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
+                val safeBinding = _binding ?: return@let
                 selectedImageUri = uri
-                binding.ivSurveyPhoto.show()
-                Glide.with(this).load(uri).centerCrop().into(binding.ivSurveyPhoto)
-                binding.btnAddPhoto.text = getString(R.string.survey_change_photo)
+                safeBinding.ivSurveyPhoto.show()
+                Glide.with(this).load(uri).centerCrop().into(safeBinding.ivSurveyPhoto)
+                safeBinding.btnAddPhoto.text = getString(R.string.survey_change_photo)
 
                 // Upload photo with compression (Requirement 5.1, 29.1, 29.2, 29.3, 29.4)
                 try {
@@ -77,10 +79,10 @@ class SurveyFragment : Fragment() {
                         // Call uploadPhoto(Bitmap, String) to ensure ImageUtils.compressImage() is used
                         viewModel.uploadPhoto(bitmap, fileName)
                     } else {
-                        binding.root.showErrorSnackbar("Failed to read image")
+                        safeBinding.root.showErrorSnackbar("Failed to read image")
                     }
                 } catch (e: Exception) {
-                    binding.root.showErrorSnackbar("Failed to read image: ${e.localizedMessage}")
+                    safeBinding.root.showErrorSnackbar("Failed to read image: ${e.localizedMessage}")
                 }
             }
         }
@@ -174,15 +176,21 @@ class SurveyFragment : Fragment() {
     }
 
     private fun captureLocation() {
-        binding.tvGpsCoordinates.text = getString(R.string.loading)
+        // Guard: view may already be destroyed when called from clearForm()
+        val safeBinding = _binding ?: return
+        safeBinding.tvGpsCoordinates.text = getString(R.string.loading)
         locationHelper.getCurrentLocation(
             onSuccess = { lat, lng ->
+                // Guard: GPS callback fires asynchronously — the view may have
+                // been destroyed if the user navigated away before the fix arrived.
+                val b = _binding ?: return@getCurrentLocation
                 viewModel.setLocation(lat, lng)
-                binding.tvGpsCoordinates.text = getString(R.string.survey_gps_captured, lat, lng)
+                b.tvGpsCoordinates.text = getString(R.string.survey_gps_captured, lat, lng)
             },
             onFailure = { error ->
-                binding.tvGpsCoordinates.text = getString(R.string.survey_gps_placeholder)
-                binding.root.showErrorSnackbar(error)
+                val b = _binding ?: return@getCurrentLocation
+                b.tvGpsCoordinates.text = getString(R.string.survey_gps_placeholder)
+                b.root.showErrorSnackbar(error)
             }
         )
     }

@@ -149,6 +149,21 @@ CREATE INDEX IF NOT EXISTS idx_volunteers_role ON volunteers(role);
 -- 8. ROW LEVEL SECURITY (RLS)
 -- ═══════════════════════════════════
 
+-- Helper function to check admin role WITHOUT triggering RLS on volunteers.
+-- SECURITY DEFINER runs as the function owner (superuser), bypassing RLS
+-- and avoiding infinite recursion when policies on `volunteers` need to
+-- check the caller's role.
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+    SELECT EXISTS (
+        SELECT 1 FROM volunteers WHERE id = auth.uid() AND role = 'admin'
+    );
+$$;
+
 -- Enable RLS on all tables
 ALTER TABLE volunteers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
@@ -158,143 +173,133 @@ ALTER TABLE task_updates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE area_risk_scores ENABLE ROW LEVEL SECURITY;
 
 -- ─── VOLUNTEERS ───
+DROP POLICY IF EXISTS "Users can view own profile" ON volunteers;
 CREATE POLICY "Users can view own profile"
     ON volunteers FOR SELECT
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Admins can view all profiles" ON volunteers;
 CREATE POLICY "Admins can view all profiles"
     ON volunteers FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
+DROP POLICY IF EXISTS "Users can update own profile" ON volunteers;
 CREATE POLICY "Users can update own profile"
     ON volunteers FOR UPDATE
     USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert own profile" ON volunteers;
 CREATE POLICY "Users can insert own profile"
     ON volunteers FOR INSERT
     WITH CHECK (auth.uid() = id);
 
 -- ─── TASKS ───
+DROP POLICY IF EXISTS "Authenticated users can view all tasks" ON tasks;
 CREATE POLICY "Authenticated users can view all tasks"
     ON tasks FOR SELECT
     TO authenticated
     USING (true);
 
+DROP POLICY IF EXISTS "Admins can insert tasks" ON tasks;
 CREATE POLICY "Admins can insert tasks"
     ON tasks FOR INSERT
     TO authenticated
-    WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    WITH CHECK (is_admin());
 
+DROP POLICY IF EXISTS "Assigned volunteer can update own task" ON tasks;
 CREATE POLICY "Assigned volunteer can update own task"
     ON tasks FOR UPDATE
     TO authenticated
     USING (assigned_volunteer = auth.uid());
 
+DROP POLICY IF EXISTS "Any authenticated user can accept open task" ON tasks;
 CREATE POLICY "Any authenticated user can accept open task"
     ON tasks FOR UPDATE
     TO authenticated
     USING (status = 'open' AND assigned_volunteer IS NULL);
 
+DROP POLICY IF EXISTS "Admins can update any task" ON tasks;
 CREATE POLICY "Admins can update any task"
     ON tasks FOR UPDATE
     TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
 -- ─── SURVEYS ───
+DROP POLICY IF EXISTS "Users can view own surveys" ON surveys;
 CREATE POLICY "Users can view own surveys"
     ON surveys FOR SELECT
     USING (volunteer_id = auth.uid());
 
+DROP POLICY IF EXISTS "Admins can view all surveys" ON surveys;
 CREATE POLICY "Admins can view all surveys"
     ON surveys FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
+DROP POLICY IF EXISTS "Users can insert own surveys" ON surveys;
 CREATE POLICY "Users can insert own surveys"
     ON surveys FOR INSERT
     WITH CHECK (volunteer_id = auth.uid());
 
+DROP POLICY IF EXISTS "Admins can update any survey" ON surveys;
 CREATE POLICY "Admins can update any survey"
     ON surveys FOR UPDATE
     TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
 -- ─── TASK UPDATES ───
+DROP POLICY IF EXISTS "Task participants can view updates" ON task_updates;
 CREATE POLICY "Task participants can view updates"
     ON task_updates FOR SELECT
     TO authenticated
     USING (true);
 
+DROP POLICY IF EXISTS "Volunteers can insert own updates" ON task_updates;
 CREATE POLICY "Volunteers can insert own updates"
     ON task_updates FOR INSERT
     TO authenticated
     WITH CHECK (volunteer_id = auth.uid());
 
 -- ─── NOTIFICATIONS ───
+DROP POLICY IF EXISTS "Users can view own notifications" ON notifications;
 CREATE POLICY "Users can view own notifications"
     ON notifications FOR SELECT
     USING (volunteer_id = auth.uid());
 
+DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 CREATE POLICY "Users can update own notifications"
     ON notifications FOR UPDATE
     USING (volunteer_id = auth.uid());
 
+DROP POLICY IF EXISTS "System can insert notifications" ON notifications;
 CREATE POLICY "System can insert notifications"
     ON notifications FOR INSERT
     TO authenticated
     WITH CHECK (true);
 
 -- ─── AREA RISK SCORES ───
+DROP POLICY IF EXISTS "Anyone can view risk scores" ON area_risk_scores;
 CREATE POLICY "Anyone can view risk scores"
     ON area_risk_scores FOR SELECT
     TO authenticated
     USING (true);
 
+DROP POLICY IF EXISTS "Admins can insert risk scores" ON area_risk_scores;
 CREATE POLICY "Admins can insert risk scores"
     ON area_risk_scores FOR INSERT
     TO authenticated
-    WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    WITH CHECK (is_admin());
 
+DROP POLICY IF EXISTS "Admins can update risk scores" ON area_risk_scores;
 CREATE POLICY "Admins can update risk scores"
     ON area_risk_scores FOR UPDATE
     TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
+DROP POLICY IF EXISTS "Admins can delete risk scores" ON area_risk_scores;
 CREATE POLICY "Admins can delete risk scores"
     ON area_risk_scores FOR DELETE
     TO authenticated
-    USING (
-        EXISTS (
-            SELECT 1 FROM volunteers v WHERE v.id = auth.uid() AND v.role = 'admin'
-        )
-    );
+    USING (is_admin());
 
 -- ═══════════════════════════════════
 -- 9. STORAGE BUCKETS
@@ -306,6 +311,7 @@ INSERT INTO storage.buckets (id, name, public) VALUES ('survey-photos', 'survey-
 ON CONFLICT (id) DO NOTHING;
 
 -- Storage policies (path-scoped to user)
+DROP POLICY IF EXISTS "Users can upload own profile photos" ON storage.objects;
 CREATE POLICY "Users can upload own profile photos"
     ON storage.objects FOR INSERT
     TO authenticated
@@ -314,11 +320,13 @@ CREATE POLICY "Users can upload own profile photos"
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Anyone can view profile photos" ON storage.objects;
 CREATE POLICY "Anyone can view profile photos"
     ON storage.objects FOR SELECT
     TO public
     USING (bucket_id = 'profile-photos');
 
+DROP POLICY IF EXISTS "Users can upload own survey photos" ON storage.objects;
 CREATE POLICY "Users can upload own survey photos"
     ON storage.objects FOR INSERT
     TO authenticated
@@ -327,6 +335,7 @@ CREATE POLICY "Users can upload own survey photos"
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Anyone can view survey photos" ON storage.objects;
 CREATE POLICY "Anyone can view survey photos"
     ON storage.objects FOR SELECT
     TO public
@@ -380,11 +389,26 @@ $$;
 -- ═══════════════════════════════════
 -- Enable realtime for key tables via Supabase Dashboard > Database > Replication
 -- Or run:
-ALTER PUBLICATION supabase_realtime ADD TABLE surveys;
-ALTER PUBLICATION supabase_realtime ADD TABLE tasks;
-ALTER PUBLICATION supabase_realtime ADD TABLE task_updates;
-ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
-ALTER PUBLICATION supabase_realtime ADD TABLE area_risk_scores;
+DO $$ BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE surveys;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE tasks;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE task_updates;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+DO $$ BEGIN
+    ALTER PUBLICATION supabase_realtime ADD TABLE area_risk_scores;
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
 
 -- ═══════════════════════════════════
 -- 12. SAMPLE DATA (optional)

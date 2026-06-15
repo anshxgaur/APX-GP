@@ -24,7 +24,7 @@
 
 ---
 
-# 📌 Problem Statement
+# 📌 Idea
 
 Thousands of NGOs across India still rely on:
 

@@ -39,7 +39,7 @@ In one line:
 
 ---
 
-## What We Are Building
+## Prototype
 
 | Part | Purpose |
 | --- | --- |

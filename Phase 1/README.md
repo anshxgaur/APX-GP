@@ -39,7 +39,7 @@ In one line:
 
 ---
 
-## Prototype
+## Prototype:
 
 | Part | Purpose |
 | --- | --- |

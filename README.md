@@ -48,7 +48,7 @@ Thousands of NGOs across India still rely on:
 
 ---
 
-# 💡 Solution
+# 💡 Solution :
 
 SevaAI is an AI-powered Social Impact Intelligence Platform that digitizes survey data, analyzes community needs, predicts risks, and intelligently assigns volunteers to maximize social impact.
 
@@ -68,7 +68,7 @@ Instead of merely storing survey information, SevaAI converts raw field data int
 
 ---
 
-## 🤖 AI Data Structuring Engine
+## 🤖 AI Data Structuring Engine :
 
 Converts unstructured survey responses into machine-readable records.
 

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Smart Resource Allocation</string>
+    <string name="app_subtitle">Data-Driven Volunteer Coordination for Social Impact</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_tasks">Tasks</string>
+    <string name="nav_survey">Survey</string>
+    <string name="nav_notifications">Notifications</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Splash -->
+    <string name="splash_loading">Loading…</string>
+
+    <!-- Auth - Login -->
+    <string name="login_title">Welcome Back</string>
+    <string name="login_subtitle">Sign in to continue your mission</string>
+    <string name="login_email_hint">Email Address</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_signup_prompt">Don\'t have an account? </string>
+    <string name="login_signup_link">Sign Up</string>
+    <string name="login_error_email">Please enter a valid email address</string>
+    <string name="login_error_password">Password must be at least 6 characters</string>
+    <string name="login_error_generic">Login failed. Please check your credentials and try again.</string>
+
+    <!-- Auth - Signup -->
+    <string name="signup_title">Join Our Mission</string>
+    <string name="signup_subtitle">Create your volunteer account</string>
+    <string name="signup_full_name_hint">Full Name</string>
+    <string name="signup_email_hint">Email Address</string>
+    <string name="signup_password_hint">Password (min 6 characters)</string>
+    <string name="signup_confirm_password_hint">Confirm Password</string>
+    <string name="signup_phone_hint">Phone Number (optional)</string>
+    <string name="signup_area_hint">Area / Location</string>
+    <string name="signup_skills_label">Select Your Skills</string>
+    <string name="signup_availability_label">Availability</string>
+    <string name="signup_button">Create Account</string>
+    <string name="signup_login_prompt">Already have an account? </string>
+    <string name="signup_login_link">Sign In</string>
+    <string name="signup_error_name">Please enter your full name</string>
+    <string name="signup_error_email">Please enter a valid email address</string>
+    <string name="signup_error_password">Password must be at least 6 characters</string>
+    <string name="signup_error_confirm">Passwords do not match</string>
+    <string name="signup_error_area">Please enter your area or location</string>
+    <string name="signup_error_generic">Registration failed. Please try again.</string>
+    <string name="signup_success">Account created successfully!</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_greeting">Hello, %1$s!</string>
+    <string name="dashboard_tasks_completed">Tasks Completed</string>
+    <string name="dashboard_hours_contributed">Hours Contributed</string>
+    <string name="dashboard_active_task">Active Task</string>
+    <string name="dashboard_view_task">View Task</string>
+    <string name="dashboard_urgent_tasks">Urgent Tasks Near You</string>
+    <string name="dashboard_recent_surveys">Recent Surveys</string>
+    <string name="dashboard_accept">Accept</string>
+    <string name="dashboard_no_active_task">No active task right now</string>
+    <string name="dashboard_no_urgent_tasks">No urgent tasks available</string>
+    <string name="dashboard_no_recent_surveys">No surveys submitted yet</string>
+
+    <!-- Survey -->
+    <string name="survey_title">Submit Field Survey</string>
+    <string name="survey_category_hint">Category</string>
+    <string name="survey_severity_label">Severity Level</string>
+    <string name="survey_severity_minor">Minor</string>
+    <string name="survey_severity_low">Low</string>
+    <string name="survey_severity_moderate">Moderate</string>
+    <string name="survey_severity_high">High</string>
+    <string name="survey_severity_critical">Critical</string>
+    <string name="survey_people_affected_hint">People Affected</string>
+    <string name="survey_description_hint">Description (optional)</string>
+    <string name="survey_location_hint">Location Name</string>
+    <string name="survey_gps_label">GPS Coordinates</string>
+    <string name="survey_gps_placeholder">Tap to capture GPS location</string>
+    <string name="survey_gps_captured">Lat: %1$.6f, Lng: %2$.6f</string>
+    <string name="survey_refresh_gps">Refresh GPS</string>
+    <string name="survey_photo_label">Photo (optional)</string>
+    <string name="survey_add_photo">Add Photo</string>
+    <string name="survey_change_photo">Change Photo</string>
+    <string name="survey_submit">Submit Survey</string>
+    <string name="survey_error_category">Please select a category</string>
+    <string name="survey_error_people">Please enter the number of people affected</string>
+    <string name="survey_error_location">Please enter a location name</string>
+    <string name="survey_error_gps">Please capture GPS coordinates first</string>
+    <string name="survey_success">Survey submitted successfully!</string>
+    <string name="survey_error_generic">Failed to submit survey. Please try again.</string>
+
+    <!-- Tasks -->
+    <string name="tasks_title">Tasks</string>
+    <string name="tasks_tab_open">Open</string>
+    <string name="tasks_tab_ongoing">Ongoing</string>
+    <string name="tasks_tab_completed">Completed</string>
+    <string name="tasks_accept">Accept Task</string>
+    <string name="tasks_view_details">View Details</string>
+    <string name="tasks_view_summary">View Summary</string>
+    <string name="tasks_empty_open">No open tasks available right now</string>
+    <string name="tasks_empty_ongoing">You have no ongoing tasks</string>
+    <string name="tasks_empty_completed">No completed tasks yet</string>
+    <string name="tasks_hours">%1$d hrs</string>
+    <string name="tasks_cached_indicator">Showing cached data (offline)</string>
+
+    <!-- Task Detail -->
+    <string name="task_detail_title">Task Details</string>
+    <string name="task_detail_category">Category</string>
+    <string name="task_detail_urgency">Urgency</string>
+    <string name="task_detail_location">Location</string>
+    <string name="task_detail_estimated_hours">Estimated Hours</string>
+    <string name="task_detail_required_skills">Required Skills</string>
+    <string name="task_detail_description">Description</string>
+    <string name="task_detail_field_notes">Field Notes</string>
+    <string name="task_detail_field_notes_hint">Add your field notes here…</string>
+    <string name="task_detail_completion_note">Completion Note</string>
+    <string name="task_detail_started_at">Started At</string>
+    <string name="task_detail_completed_at">Completed At</string>
+    <string name="task_detail_accept">Accept Task</string>
+    <string name="task_detail_complete">Mark as Complete</string>
+    <string name="task_detail_accept_confirm">Are you sure you want to accept this task?</string>
+    <string name="task_detail_complete_dialog_title">Complete Task</string>
+    <string name="task_detail_complete_dialog_hint">Enter completion note (required)</string>
+    <string name="task_detail_complete_error_note">Please enter a completion note</string>
+    <string name="task_detail_accept_success">Task accepted successfully!</string>
+    <string name="task_detail_complete_success">Task marked as complete!</string>
+    <string name="task_detail_error">Failed to perform action. Please try again.</string>
+    <string name="task_detail_status">Status</string>
+    <string name="task_detail_assigned_volunteer">Assigned To</string>
+    <string name="task_detail_unassigned">Unassigned</string>
+    <string name="task_detail_no_notes">No notes</string>
+    <string name="task_detail_no_description">No description provided</string>
+    <string name="task_detail_updates">Task Updates</string>
+    <string name="task_detail_no_updates">No updates yet</string>
+    <string name="task_detail_update_by">By: %1$s</string>
+    <string name="task_detail_post_update">Post an Update</string>
+    <string name="task_detail_update_text_hint">What\'s the progress?</string>
+    <string name="task_detail_select_photo">Add Photo</string>
+    <string name="task_detail_post">Post</string>
+    <string name="task_detail_no_photo_selected">No photo selected</string>
+    <string name="task_detail_photo_selected">Photo selected: %1$s</string>
+    <string name="task_detail_update_posted">Update posted</string>
+    <string name="task_detail_update_failed">Failed to post update</string>
+
+    <!-- Profile -->
+    <string name="profile_title">My Profile</string>
+    <string name="profile_change_photo">Change Photo</string>
+    <string name="profile_full_name_hint">Full Name</string>
+    <string name="profile_email_hint">Email</string>
+    <string name="profile_phone_hint">Phone Number</string>
+    <string name="profile_area_hint">Area / Location</string>
+    <string name="profile_skills_label">Skills</string>
+    <string name="profile_availability_label">Availability</string>
+    <string name="profile_impact">Impact Statistics</string>
+    <string name="profile_tasks_completed">Tasks Completed</string>
+    <string name="profile_hours_contributed">Hours Contributed</string>
+    <string name="profile_save">Save Changes</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_save_success">Profile updated successfully!</string>
+    <string name="profile_save_error">Failed to update profile. Please try again.</string>
+    <string name="profile_logout_confirm">Are you sure you want to logout?</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_empty">No notifications yet</string>
+    <string name="notifications_mark_read">Mark as read</string>
+
+    <!-- Skills -->
+    <string name="skill_medical">Medical</string>
+    <string name="skill_education">Education</string>
+    <string name="skill_construction">Construction</string>
+    <string name="skill_food_distribution">Food Distribution</string>
+    <string name="skill_counseling">Counseling</string>
+    <string name="skill_transportation">Transportation</string>
+    <string name="skill_it_support">IT Support</string>
+    <string name="skill_administration">Administration</string>
+
+    <!-- Availability -->
+    <string name="availability_flexible">Flexible</string>
+    <string name="availability_weekdays">Weekdays Only</string>
+    <string name="availability_weekends">Weekends Only</string>
+    <string name="availability_mornings">Mornings Only</string>
+    <string name="availability_evenings">Evenings Only</string>
+
+    <!-- Survey Categories -->
+    <string name="category_food_shortage">Food Shortage</string>
+    <string name="category_medical_need">Medical Need</string>
+    <string name="category_shelter_issue">Shelter Issue</string>
+    <string name="category_education_gap">Education Gap</string>
+    <string name="category_safety_concern">Safety Concern</string>
+    <string name="category_infrastructure">Infrastructure</string>
+    <string name="category_other">Other</string>
+
+    <!-- General -->
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="error_network">Network error. Please check your connection.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm">Confirm</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="empty_state_title">Nothing here yet</string>
+    <string name="empty_state_message">Content will appear once it\'s available</string>
+    <string name="location_not_specified">Location not specified</string>
+    <string name="location_permission_required">Location permission is required to capture GPS coordinates</string>
+    <string name="camera_permission_required">Camera permission is required to take photos</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_app_logo">App Logo</string>
+    <string name="cd_profile_photo">Profile Photo</string>
+    <string name="cd_survey_photo">Survey Photo</string>
+    <string name="cd_urgency_indicator">Urgency Indicator</string>
+    <string name="cd_notification_icon">Notification Icon</string>
+    <string name="cd_back">Go Back</string>
+</resources>
